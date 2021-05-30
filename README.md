@@ -15,7 +15,7 @@ System.out.println(UrlBuilder.of("www.youtube.com")
     .withoutWww()
     .path(path -> path.add("watch"))
     .query(query -> query.add("v", "dQw4w9WgXcQ"))
-    .build()); // https://www.youtube.com/watch?v=dQw4w9WgXcQ
+    .build()); // https://youtube.com/watch?v=dQw4w9WgXcQ
 ```
 
 ```java
