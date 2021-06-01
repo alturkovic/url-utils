@@ -26,8 +26,7 @@ package com.github.alturkovic.url;
 
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
 class UrlBuilderShould {
 
@@ -42,6 +41,15 @@ class UrlBuilderShould {
     void initializeUsingHttpsAsDefaultProtocol() {
         assertThat(UrlBuilder.of("localhost.com").build().toString()).isEqualTo("https://localhost.com");
         assertThat(UrlBuilder.of("//localhost.com").build().toString()).isEqualTo("https://localhost.com");
+    }
+
+    @Test
+    void parseEncodedUrls() {
+        assertThat(UrlBuilder.of("http://localhost.com/index.php?text=Ισπανική έρευνα").build().toString())
+            .isEqualTo("http://localhost.com/index.php?text=Ισπανική%20έρευνα");
+
+        assertThat(UrlBuilder.of("http://localhost.com/هرگزتوراناامیدنمیکنم").build().toString())
+            .isEqualTo("http://localhost.com/هرگزتوراناامیدنمیکنم");
     }
 
     @Test
