@@ -38,6 +38,7 @@ final class StringUtils {
         if (hasText(text) && text.startsWith(prefix)) {
             return text.substring(prefix.length());
         }
+
         return text;
     }
 
@@ -45,6 +46,7 @@ final class StringUtils {
         if (hasText(text) && text.endsWith(suffix)) {
             return text.substring(0, text.lastIndexOf(suffix));
         }
+
         return text;
     }
 
@@ -52,9 +54,11 @@ final class StringUtils {
         if (isBlank(text)) {
             return prefix;
         }
+
         if (text.startsWith(prefix)) {
             return text;
         }
+
         return prefix + text;
     }
 

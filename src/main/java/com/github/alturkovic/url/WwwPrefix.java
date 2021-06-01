@@ -36,6 +36,7 @@ enum WwwPrefix {
             if (host.startsWith("www.") && host.indexOf('.', 4) != -1) {
                 return host.substring(4);
             }
+
             return host;
         }
     };

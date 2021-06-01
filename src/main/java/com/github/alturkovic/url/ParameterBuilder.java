@@ -52,6 +52,7 @@ public class ParameterBuilder {
         if (StringUtils.isBlank(query)) {
             return new ParameterBuilder();
         }
+
         return initialize(query, delimiter);
     }
 

@@ -54,6 +54,7 @@ public class PathBuilder {
         if (StringUtils.isBlank(path)) {
             return new PathBuilder();
         }
+
         return initialize(path);
     }
 
