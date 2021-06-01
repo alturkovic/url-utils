@@ -183,7 +183,7 @@ public class ParameterBuilder {
         ParameterBuilder builder = new ParameterBuilder();
         String[] parameters = query.split(delimiter);
         for (String parameter : parameters) {
-            builder.add(UrlParameter.parse(parameter));
+            UrlParameter.parse(parameter).ifPresent(builder::add);
         }
         return builder;
     }

@@ -34,6 +34,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ParameterBuilderShould {
 
     @Test
+    void dropInvalidParameters() {
+        assertThat(ParameterBuilder.of("a=b=c", "&").build("&"))
+            .isNull();
+
+        assertThat(ParameterBuilder.of("a=b?c=d", "&").build("&"))
+            .isNull();
+
+        assertThat(ParameterBuilder.of("a=b&c=d=e", "&").build("&"))
+            .isEqualTo("a=b");
+    }
+
+    @Test
     void addParameter() {
         ParameterBuilder parameter = ParameterBuilder.of("a=1", "&");
         parameter.add("a");

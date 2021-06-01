@@ -26,9 +26,10 @@ package com.github.alturkovic.url;
 
 import lombok.Data;
 
-import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 import static java.net.URLDecoder.decode;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Data
 class UrlParameter {
@@ -43,23 +44,24 @@ class UrlParameter {
         if (StringUtils.isBlank(value)) {
             return named(name);
         }
+
         return new UrlParameter(name, value);
     }
 
-    static UrlParameter parse(String param) {
+    static Optional<UrlParameter> parse(String param) {
         String[] parts = param.split("=");
         if (parts.length == 1) {
-            String name = decode(parts[0], StandardCharsets.UTF_8);
-            return named(name);
+            String name = decode(parts[0], UTF_8);
+            return Optional.of(UrlParameter.named(name));
         }
 
         if (parts.length == 2) {
-            String name = decode(parts[0], StandardCharsets.UTF_8);
-            String value = decode(parts[1], StandardCharsets.UTF_8);
-            return of(name, value);
+            String name = decode(parts[0], UTF_8);
+            String value = decode(parts[1], UTF_8);
+            return Optional.of(UrlParameter.of(name, value));
         }
 
-        throw new IllegalArgumentException("Invalid parameter definition: " + param);
+        return Optional.empty();
     }
 
     public String format() {
