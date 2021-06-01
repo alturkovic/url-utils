@@ -55,7 +55,6 @@ public class UrlBuilder {
     private ParameterBuilder query;
     private String fragment;
 
-    private WwwPrefix www = WwwPrefix.IGNORE;
     private boolean appendTrailingSlash;
 
     /**
@@ -315,8 +314,7 @@ public class UrlBuilder {
      * @return this builder
      */
     public UrlBuilder withWww() {
-        this.www = WwwPrefix.INCLUDE;
-        return this;
+        return host(WwwPrefix.INCLUDE.normalizeHost(host));
     }
 
     /**
@@ -325,8 +323,7 @@ public class UrlBuilder {
      * @return this builder
      */
     public UrlBuilder withoutWww() {
-        this.www = WwwPrefix.EXCLUDE;
-        return this;
+        return host(WwwPrefix.EXCLUDE.normalizeHost(host));
     }
 
     /**
@@ -370,7 +367,6 @@ public class UrlBuilder {
      */
     public URI build() {
         try {
-            String normalizedHost = www.normalizeHost(host);
             String builtPath = path.build();
             String builtQuery = query.build("&");
             String formattedUserInfo = this.userInfo.format();
@@ -393,7 +389,7 @@ public class UrlBuilder {
                 }
             }
 
-            return new URI(protocol, formattedUserInfo, normalizedHost, definedPort, builtPath, builtQuery, definedFragment);
+            return new URI(protocol, formattedUserInfo, host, definedPort, builtPath, builtQuery, definedFragment);
         } catch (URISyntaxException e) {
             throw new IllegalArgumentException(e);
         }

@@ -38,11 +38,6 @@ enum WwwPrefix {
             }
             return host;
         }
-    }, IGNORE {
-        @Override
-        String normalizeHost(String host) {
-            return host;
-        }
     };
 
     abstract String normalizeHost(String host);
