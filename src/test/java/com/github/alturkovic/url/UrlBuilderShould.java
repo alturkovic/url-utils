@@ -221,13 +221,13 @@ class UrlBuilderShould {
     }
 
     @Test
-    void overrideEverythingAfterHost() {
+    void strip() {
         assertThat(UrlBuilder.of("http://www.localhost.com/a?b=1#c")
-            .withoutEverythingAfterHost()
+            .strip()
             .build().toString()).isEqualTo("http://www.localhost.com");
 
         assertThat(UrlBuilder.of("http://www.localhost.com/a?b=1#c/")
-            .withoutEverythingAfterHost()
+            .strip()
             .build().toString()).isEqualTo("http://www.localhost.com");
     }
 

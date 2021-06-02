@@ -347,11 +347,12 @@ public class UrlBuilder {
     }
 
     /**
-     * Exclude everything after the host.
+     * Exclude everything except the host.
      *
      * @return this builder
      */
-    public UrlBuilder withoutEverythingAfterHost() {
+    public UrlBuilder strip() {
+        withoutUserInfo();
         withoutPort();
         withoutPath();
         withoutQuery();
@@ -373,6 +374,7 @@ public class UrlBuilder {
             int definedPort = port == null ? -1 : port;
             String definedFragment = fragment;
 
+            // Java URI has trailingSlash on the last defined component
             if (appendTrailingSlash) {
                 if (hasText(definedFragment)) {
                     definedFragment += "/";

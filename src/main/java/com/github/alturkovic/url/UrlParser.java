@@ -124,6 +124,15 @@ public class UrlParser {
     }
 
     /**
+     * Get the fragment from the initialized url.
+     *
+     * @return the fragment
+     */
+    public String getFragment() {
+        return builder.getFragment();
+    }
+
+    /**
      * Get the query parameters from the initialized url.
      *
      * @return the query parameters

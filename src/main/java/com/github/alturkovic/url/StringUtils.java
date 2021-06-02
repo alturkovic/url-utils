@@ -50,7 +50,7 @@ final class StringUtils {
         return text;
     }
 
-    static String addPrefix(String text, String prefix) {
+    static String addPrefix(String prefix, String text) {
         if (isBlank(text)) {
             return prefix;
         }

@@ -41,6 +41,13 @@ class PathBuilderShould {
     }
 
     @Test
+    void addEmptyPathSegment() {
+        PathBuilder path = PathBuilder.of("a/");
+        path.addSegment("");
+        assertThat(path.build()).isEqualTo("/a//");
+    }
+
+    @Test
     void setPath() {
         assertThat(PathBuilder.of("/a/b").set("c").build()).isEqualTo("/c");
         assertThat(PathBuilder.of("/a/b").set(List.of("c", "d")).build()).isEqualTo("/c/d");

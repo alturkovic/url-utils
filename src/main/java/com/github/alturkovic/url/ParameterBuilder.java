@@ -181,8 +181,9 @@ public class ParameterBuilder {
     private static ParameterBuilder initialize(String query, String delimiter) {
         query = StringUtils.removeSuffix(query, "/");
 
-        ParameterBuilder builder = new ParameterBuilder();
         String[] parameters = query.split(delimiter);
+
+        ParameterBuilder builder = new ParameterBuilder();
         for (String parameter : parameters) {
             UrlParameter.parse(parameter).ifPresent(builder::add);
         }

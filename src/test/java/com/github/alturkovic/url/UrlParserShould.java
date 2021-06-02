@@ -36,37 +36,37 @@ class UrlParserShould {
 
     @Test
     void getProtocol() {
-        assertThat(UrlParser.of("http://localhost:8080").getProtocol())
+        assertThat(UrlParser.of("http://localhost:8080/").getProtocol())
             .isEqualTo("http");
     }
 
     @Test
     void getDefaultProtocol() {
-        assertThat(UrlParser.of("localhost:8080").getProtocol())
+        assertThat(UrlParser.of("localhost:8080/").getProtocol())
             .isEqualTo("https");
     }
 
     @Test
     void getHost() {
-        assertThat(UrlParser.of("localhost:8080").getHost())
+        assertThat(UrlParser.of("localhost:8080/").getHost())
             .isEqualTo("localhost");
     }
 
     @Test
     void getPort() {
-        assertThat(UrlParser.of("localhost:8080").getPort())
+        assertThat(UrlParser.of("localhost:8080/").getPort())
             .isEqualTo(8080);
     }
 
     @Test
     void getDefaultHttpPort() {
-        assertThat(UrlParser.of("http://localhost").getPort())
+        assertThat(UrlParser.of("http://localhost/").getPort())
             .isEqualTo(80);
     }
 
     @Test
     void getDefaultHttpsPort() {
-        assertThat(UrlParser.of("https://localhost").getPort())
+        assertThat(UrlParser.of("https://localhost/").getPort())
             .isEqualTo(443);
     }
 
@@ -78,8 +78,14 @@ class UrlParserShould {
 
     @Test
     void getQuery() {
-        assertThat(UrlParser.of("localhost:8080?a=1&b=2").getQuery())
+        assertThat(UrlParser.of("localhost:8080?a=1&b=2/").getQuery())
             .isEqualTo("a=1&b=2");
+    }
+
+    @Test
+    void getFragment() {
+        assertThat(UrlParser.of("localhost:8080#DOWNLOAD/").getFragment())
+            .isEqualTo("DOWNLOAD");
     }
 
     @Test

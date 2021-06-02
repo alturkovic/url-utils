@@ -28,7 +28,7 @@ enum WwwPrefix {
     INCLUDE {
         @Override
         String normalizeHost(String host) {
-            return StringUtils.addPrefix(host, "www.");
+            return StringUtils.addPrefix("www.", host);
         }
     }, EXCLUDE {
         @Override
