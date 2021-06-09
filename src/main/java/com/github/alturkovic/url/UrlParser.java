@@ -66,6 +66,20 @@ public class UrlParser {
     }
 
     /**
+     * Parse {@link URI} from a string.
+     * <p>
+     * If the protocol is missing from it, 'https' will be used by default.
+     * <p>
+     * This method parses un-encoded URI's that {@link URI#create(String)} cannot.
+     *
+     * @param url to initialize from
+     * @return builder instance
+     */
+    public static URI parse(String url) {
+        return UrlBuilder.of(url).build();
+    }
+
+    /**
      * Get the protocol from the initialized url.
      *
      * @return the protocol

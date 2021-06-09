@@ -35,6 +35,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 class UrlParserShould {
 
     @Test
+    void parse() {
+        assertThat(UrlParser.parse("example.com"))
+            .hasToString("https://example.com");
+    }
+
+    @Test
     void getProtocol() {
         assertThat(UrlParser.of("http://localhost:8080/").getProtocol())
             .isEqualTo("http");
