@@ -49,7 +49,7 @@ public class UrlBuilder {
 
     private String protocol;
     private UserInfo userInfo;
-    private String host;
+    private HostBuilder host;
     private Integer port;
     private PathBuilder path;
     private ParameterBuilder query;
@@ -69,10 +69,10 @@ public class UrlBuilder {
         UrlBuilder builder = new UrlBuilder()
             .protocol(uri.getScheme() == null ? DEFAULT_PROTOCOL : uri.getScheme())
             .userInfo(uri.getRawUserInfo())
-            .host(uri.getHost())
             .port(uri.getPort())
             .fragment(StringUtils.removeSuffix(uri.getRawFragment(), "/"));
 
+        builder.host = HostBuilder.of(uri.getHost());
         builder.path = PathBuilder.of(uri.getRawPath());
         builder.query = ParameterBuilder.of(uri.getRawQuery(), "&");
 
@@ -175,22 +175,6 @@ public class UrlBuilder {
     }
 
     /**
-     * Set the host value.
-     *
-     * @param host to set
-     * @return this builder
-     * @throws IllegalArgumentException if {@code host} is blank or {@code null}
-     */
-    public UrlBuilder host(String host) {
-        if (StringUtils.isBlank(host)) {
-            throw new IllegalArgumentException("Host cannot be undefined");
-        }
-
-        this.host = host;
-        return this;
-    }
-
-    /**
      * Set the port value.
      *
      * @param port to set
@@ -198,6 +182,17 @@ public class UrlBuilder {
      */
     public UrlBuilder port(Integer port) {
         this.port = port;
+        return this;
+    }
+
+    /**
+     * Modify the host.
+     *
+     * @param consumer to modify host
+     * @return this builder
+     */
+    public UrlBuilder host(Consumer<HostBuilder> consumer) {
+        consumer.accept(host);
         return this;
     }
 
@@ -309,24 +304,6 @@ public class UrlBuilder {
     }
 
     /**
-     * Include 'www.' in the hostname.
-     *
-     * @return this builder
-     */
-    public UrlBuilder withWww() {
-        return host(WwwPrefix.INCLUDE.normalizeHost(host));
-    }
-
-    /**
-     * Exclude 'www.' from the hostname.
-     *
-     * @return this builder
-     */
-    public UrlBuilder withoutWww() {
-        return host(WwwPrefix.EXCLUDE.normalizeHost(host));
-    }
-
-    /**
      * Include the trailing slash.
      *
      * @return this builder
@@ -368,6 +345,7 @@ public class UrlBuilder {
      */
     public URI build() {
         try {
+            String builtHost = host.build();
             String builtPath = path.build();
             String builtQuery = query.build("&");
             String formattedUserInfo = this.userInfo.format();
@@ -391,7 +369,7 @@ public class UrlBuilder {
                 }
             }
 
-            return new URI(protocol, formattedUserInfo, host, definedPort, builtPath, builtQuery, definedFragment);
+            return new URI(protocol, formattedUserInfo, builtHost, definedPort, builtPath, builtQuery, definedFragment);
         } catch (URISyntaxException e) {
             throw new IllegalArgumentException(e);
         }

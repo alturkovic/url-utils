@@ -94,7 +94,7 @@ public class UrlParser {
      * @return the host
      */
     public String getHost() {
-        return builder.getHost();
+        return builder.getHost().build();
     }
 
     /**
@@ -126,6 +126,14 @@ public class UrlParser {
      */
     public String getPath() {
         return builder.getPath().build();
+    }
+
+    /**
+     * Get the path segments from the initialized url.
+     * @return the path segments
+     */
+    public List<String> getPathSegments() {
+        return extractPathSegments(builder.getPath());
     }
 
     /**
@@ -163,9 +171,7 @@ public class UrlParser {
      */
     public Map<String, List<String>> getMatrixParameters(String path) {
         PathBuilder pathBuilder = PathBuilder.of(path);
-        return getMatrixParameters(pathBuilder.getPathSegments().stream()
-            .map(PathBuilder.PathSegment::getPath)
-            .collect(Collectors.toList()));
+        return getMatrixParameters(extractPathSegments(pathBuilder));
     }
 
     /**
@@ -186,5 +192,11 @@ public class UrlParser {
             result.computeIfAbsent(parameter.getName(), s -> new ArrayList<>()).add(parameter.getValue());
         }
         return result;
+    }
+
+    private List<String> extractPathSegments(PathBuilder pathBuilder) {
+        return pathBuilder.getPathSegments().stream()
+            .map(PathBuilder.PathSegment::getPath)
+            .collect(Collectors.toList());
     }
 }

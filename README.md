@@ -13,7 +13,7 @@ The main API classes are:
 1. Add path or query parameters using lambdas.
 ```java
 System.out.println(UrlBuilder.of("www.youtube.com")
-    .withoutWww()
+    .host(HostBuilder::withoutWww)
     .path(path -> path.add("watch"))
     .query(query -> query.add("v", "dQw4w9WgXcQ"))
     .build()); // https://youtube.com/watch?v=dQw4w9WgXcQ
@@ -72,7 +72,7 @@ Add the following under your `<dependencies>`:
     <dependency>
         <groupId>com.github.alturkovic</groupId>
         <artifactId>url-utils</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
     </dependency>
 </dependencies>
 ```

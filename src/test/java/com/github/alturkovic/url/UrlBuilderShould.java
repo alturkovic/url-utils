@@ -107,20 +107,6 @@ class UrlBuilderShould {
     }
 
     @Test
-    void overrideHost() {
-        assertThat(UrlBuilder.of("http://localhost.com")
-            .host("example.net")
-            .build().toString()).isEqualTo("http://example.net");
-    }
-
-    @Test
-    void notAllowBlankHost() {
-        assertThatThrownBy(() -> UrlBuilder.of("http://localhost.com").host(null));
-        assertThatThrownBy(() -> UrlBuilder.of("http://localhost.com").host(""));
-        assertThatThrownBy(() -> UrlBuilder.of("http://localhost.com").host(" "));
-    }
-
-    @Test
     void overridePort() {
         assertThat(UrlBuilder.of("http://localhost.com")
             .port(8080)
@@ -181,23 +167,6 @@ class UrlBuilderShould {
     }
 
     @Test
-    void overrideWww() {
-        assertThat(UrlBuilder.of("http://localhost.com").build().toString())
-            .isEqualTo("http://localhost.com");
-
-        assertThat(UrlBuilder.of("http://www.localhost.com").build().toString())
-            .isEqualTo("http://www.localhost.com");
-
-        assertThat(UrlBuilder.of("http://localhost.com")
-            .withWww()
-            .build().toString()).isEqualTo("http://www.localhost.com");
-
-        assertThat(UrlBuilder.of("http://www.localhost.com")
-            .withoutWww()
-            .build().toString()).isEqualTo("http://localhost.com");
-    }
-
-    @Test
     void overrideTrailingSlash() {
         assertThat(UrlBuilder.of("http://localhost.com").build().toString())
             .isEqualTo("http://localhost.com");
@@ -235,13 +204,13 @@ class UrlBuilderShould {
     void buildComplex() {
         assertThat(UrlBuilder.of("localhost.com/a?b=1#C/")
             .withHttp()
-            .withWww()
+            .host(HostBuilder::withWww)
             .query(ParameterBuilder::clear)
             .build().toString()).isEqualTo("http://www.localhost.com/a#C/");
 
         assertThat(UrlBuilder.of("localhost.com/a/b?q=1")
             .withHttp()
-            .withWww()
+            .host(HostBuilder::withWww)
             .withTrailingSlash()
             .path(path -> path.set("c"))
             .query(ParameterBuilder::clear)

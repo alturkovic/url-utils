@@ -83,6 +83,12 @@ class UrlParserShould {
     }
 
     @Test
+    void getPathSegments() {
+        assertThat(UrlParser.of("localhost:8080/api/test").getPathSegments())
+            .containsExactly("api", "test");
+    }
+
+    @Test
     void getQuery() {
         assertThat(UrlParser.of("localhost:8080?a=1&b=2/").getQuery())
             .isEqualTo("a=1&b=2");
