@@ -374,4 +374,15 @@ public class UrlBuilder {
             throw new IllegalArgumentException(e);
         }
     }
+
+    /**
+     * Convert this builder to a {@link UrlParser}.
+     * <p>
+     * Changes to each won't affect the other.
+     *
+     * @return this as {@link UrlParser}
+     */
+    public UrlParser asParser() {
+        return UrlParser.of(build());
+    }
 }

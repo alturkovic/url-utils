@@ -130,6 +130,7 @@ public class UrlParser {
 
     /**
      * Get the path segments from the initialized url.
+     *
      * @return the path segments
      */
     public List<String> getPathSegments() {
@@ -184,6 +185,17 @@ public class UrlParser {
         List<PathBuilder.PathSegment> segments = builder.getPath().getMatchingSegments(path);
         PathBuilder.PathSegment lastSegment = segments.get(segments.size() - 1);
         return asParameterMap(lastSegment.getParameters().getParameters());
+    }
+
+    /**
+     * Convert this parser to a {@link UrlBuilder}.
+     * <p>
+     * Changes to each won't affect the other.
+     *
+     * @return this as {@link UrlBuilder}
+     */
+    public UrlBuilder asBuilder() {
+        return UrlBuilder.of(builder.build());
     }
 
     private Map<String, List<String>> asParameterMap(List<UrlParameter> parameters) {
