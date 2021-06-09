@@ -72,7 +72,7 @@ Add the following under your `<dependencies>`:
     <dependency>
         <groupId>com.github.alturkovic</groupId>
         <artifactId>url-utils</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
     </dependency>
 </dependencies>
 ```
