@@ -376,7 +376,7 @@ public class UrlBuilder {
     }
 
     /**
-     * Convert this builder to a {@link UrlParser}.
+     * Convert this builder to {@link UrlParser}.
      * <p>
      * Changes to each won't affect the other.
      *

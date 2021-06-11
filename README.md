@@ -50,6 +50,11 @@ System.out.println(parsed.getPort()); // 443
 URI uri = UrlParser.parse("example.com/a b"); // https://example.com/a%20b
 ```
 
+6. Extract file type.
+```java
+System.out.println(UrlParser.of("localhost/api/data.csv").getFileType()); // csv
+```
+
 ## Importing into your project using Maven
 
 Add the JitPack repository into your `pom.xml`.
@@ -72,7 +77,7 @@ Add the following under your `<dependencies>`:
     <dependency>
         <groupId>com.github.alturkovic</groupId>
         <artifactId>url-utils</artifactId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
     </dependency>
 </dependencies>
 ```

@@ -36,6 +36,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static java.net.URLDecoder.decode;
+import static java.util.Collections.emptyList;
 
 /**
  * Used to build the URL path.
@@ -220,6 +221,10 @@ public class PathBuilder {
     }
 
     List<PathSegment> getMatchingSegments(List<String> pathSegments) {
+        if (this.pathSegments.isEmpty()) {
+            return emptyList();
+        }
+
         for (int i = 0; i < pathSegments.size(); i++) {
             assertPathElementsMatch(pathSegments.get(i), i);
         }

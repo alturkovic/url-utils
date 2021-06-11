@@ -28,11 +28,10 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.util.Collections.emptyMap;
 
 /**
  * Used to extract values from urls.
@@ -124,8 +123,8 @@ public class UrlParser {
      *
      * @return the path
      */
-    public String getPath() {
-        return builder.getPath().build();
+    public Optional<String> getPath() {
+        return Optional.ofNullable(builder.getPath().build());
     }
 
     /**
@@ -133,8 +132,8 @@ public class UrlParser {
      *
      * @return the path segments
      */
-    public List<String> getPathSegments() {
-        return extractPathSegments(builder.getPath());
+    public Optional<List<String>> getPathSegments() {
+        return Optional.of(extractPathSegments(builder.getPath()));
     }
 
     /**
@@ -142,8 +141,8 @@ public class UrlParser {
      *
      * @return the query
      */
-    public String getQuery() {
-        return builder.getQuery().build("&");
+    public Optional<String> getQuery() {
+        return Optional.ofNullable(builder.getQuery().build("&"));
     }
 
     /**
@@ -151,8 +150,8 @@ public class UrlParser {
      *
      * @return the fragment
      */
-    public String getFragment() {
-        return builder.getFragment();
+    public Optional<String> getFragment() {
+        return Optional.ofNullable(builder.getFragment());
     }
 
     /**
@@ -183,12 +182,36 @@ public class UrlParser {
      */
     public Map<String, List<String>> getMatrixParameters(List<String> path) {
         List<PathBuilder.PathSegment> segments = builder.getPath().getMatchingSegments(path);
+        if (segments.isEmpty()) {
+            return emptyMap();
+        }
+
         PathBuilder.PathSegment lastSegment = segments.get(segments.size() - 1);
         return asParameterMap(lastSegment.getParameters().getParameters());
     }
 
     /**
-     * Convert this parser to a {@link UrlBuilder}.
+     * Get the file of the initialized url.
+     *
+     * @return file
+     */
+    public Optional<String> getFile() {
+        return getPathSegments()
+            .map(this::getLastSegment)
+            .filter(this::containsDot);
+    }
+
+    /**
+     * Get the file type of the initialized url.
+     *
+     * @return file type
+     */
+    public Optional<String> getFileType() {
+        return getFile().map(this::extractContentAfterDot);
+    }
+
+    /**
+     * Convert this parser to {@link UrlBuilder}.
      * <p>
      * Changes to each won't affect the other.
      *
@@ -210,5 +233,21 @@ public class UrlParser {
         return pathBuilder.getPathSegments().stream()
             .map(PathBuilder.PathSegment::getPath)
             .collect(Collectors.toList());
+    }
+
+    private String getLastSegment(List<String> segments) {
+        return segments.get(segments.size() - 1);
+    }
+
+    private boolean containsDot(String path) {
+        return getDotIndex(path) != -1;
+    }
+
+    private int getDotIndex(String path) {
+        return path.lastIndexOf(".");
+    }
+
+    private String extractContentAfterDot(String path) {
+        return path.substring(getDotIndex(path) + 1);
     }
 }

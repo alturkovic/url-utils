@@ -79,24 +79,28 @@ class UrlParserShould {
     @Test
     void getPath() {
         assertThat(UrlParser.of("localhost:8080/api/test").getPath())
+            .isPresent().get()
             .isEqualTo("/api/test");
     }
 
     @Test
     void getPathSegments() {
         assertThat(UrlParser.of("localhost:8080/api/test").getPathSegments())
+            .isPresent().get().asList()
             .containsExactly("api", "test");
     }
 
     @Test
     void getQuery() {
         assertThat(UrlParser.of("localhost:8080?a=1&b=2/").getQuery())
+            .isPresent().get()
             .isEqualTo("a=1&b=2");
     }
 
     @Test
     void getFragment() {
         assertThat(UrlParser.of("localhost:8080#DOWNLOAD/").getFragment())
+            .isPresent().get()
             .isEqualTo("DOWNLOAD");
     }
 
@@ -106,6 +110,12 @@ class UrlParserShould {
         assertThat(parameters.get("a")).containsExactly("1");
         assertThat(parameters.get("b")).containsExactly("2", null);
         assertThat(parameters.get("c")).containsExactly("3");
+    }
+
+    @Test
+    void getEmptyQueryParameters() {
+        Map<String, List<String>> parameters = UrlParser.of("localhost:8080").getQueryParameters();
+        assertThat(parameters).isEmpty();
     }
 
     @Test
@@ -123,5 +133,37 @@ class UrlParserShould {
             "c", List.of("1"),
             "d", Arrays.asList(null, "2")
         ));
+    }
+
+    @Test
+    void getEmptyMatrixParameters() {
+        Map<String, List<String>> parameters = UrlParser.of("localhost:8080").getMatrixParameters("/");
+        assertThat(parameters).isEmpty();
+    }
+
+    @Test
+    void getFile() {
+        assertThat(UrlParser.of("localhost:8080/file.txt?q=1").getFile())
+            .isPresent().get()
+            .isEqualTo("file.txt");
+    }
+
+    @Test
+    void getEmptyFile() {
+        assertThat(UrlParser.of("localhost:8080/file?q=1").getFile())
+            .isEmpty();
+    }
+
+    @Test
+    void getFileType() {
+        assertThat(UrlParser.of("localhost:8080/file.txt?q=1").getFileType())
+            .isPresent().get()
+            .isEqualTo("txt");
+    }
+
+    @Test
+    void getEmptyFileType() {
+        assertThat(UrlParser.of("localhost:8080/file?q=1").getFileType())
+            .isEmpty();
     }
 }
