@@ -197,6 +197,7 @@ public class UrlParser {
      */
     public Optional<String> getFile() {
         return getPathSegments()
+            .filter(segments -> !segments.isEmpty())
             .map(this::getLastSegment)
             .filter(this::containsDot);
     }

@@ -163,6 +163,9 @@ class UrlParserShould {
 
     @Test
     void getEmptyFileType() {
+        assertThat(UrlParser.of("https://www.example.com").getFileType())
+            .isEmpty();
+
         assertThat(UrlParser.of("localhost:8080/file?q=1").getFileType())
             .isEmpty();
     }
