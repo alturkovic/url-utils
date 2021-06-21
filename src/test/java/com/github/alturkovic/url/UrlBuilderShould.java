@@ -195,9 +195,9 @@ class UrlBuilderShould {
             .strip()
             .build().toString()).isEqualTo("http://www.localhost.com");
 
-        assertThat(UrlBuilder.of("http://www.localhost.com/a?b=1#c/")
+        assertThat(UrlBuilder.of("http://www.example.com:8080/a?b=1#c/")
             .strip()
-            .build().toString()).isEqualTo("http://www.localhost.com");
+            .build().toString()).isEqualTo("http://www.example.com:8080");
     }
 
     @Test

@@ -330,7 +330,6 @@ public class UrlBuilder {
      */
     public UrlBuilder strip() {
         withoutUserInfo();
-        withoutPort();
         withoutPath();
         withoutQuery();
         withoutFragment();
