@@ -22,36 +22,45 @@
  * SOFTWARE.
  */
 
-package com.github.alturkovic.url;
+package com.github.alturkovic.url.matcher;
 
-import java.util.Optional;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.Map;
 
-class ProtocolEnforcer {
-    static String addProtocolIfMissing(String url, String protocol) {
-        if (url.startsWith("//")) {
-            return protocol + ":" + url;
+class Node {
+    private final Map<String, Node> elements = new HashMap<>(0);
+    private boolean matcher;
+
+    public boolean contains(Deque<String> parts) {
+        String element = parts.pop();
+        Node node = elements.get(element);
+        if (node == null) {
+            return matcher;
         }
 
-        return extractProtocol(url)
-            .map(p -> {
-                if (!p.equals("http") && !p.equals("https")) {
-                    throw new IllegalArgumentException("Only http(s) protocols supported but found: " + p);
-                }
-                return url;
-            }).orElse(protocol + "://" + url);
+        if (parts.isEmpty()) {
+            return node.matcher;
+        }
+
+        return node.contains(parts);
     }
 
-    private static Optional<String> extractProtocol(String url) {
-        StringBuilder found = new StringBuilder();
-        for (char c : url.toCharArray()) {
-            found.append(c);
-
-            if (c == '/' && found.toString().endsWith("://")) {
-                found.setLength(found.length() - 3);
-                return Optional.of(found.toString());
-            }
+    public void add(Deque<String> parts) {
+        if (parts.isEmpty()) {
+            matcher = true;
+            return;
         }
 
-        return Optional.empty();
+        String element = parts.pop();
+
+        Node mappedNode = this.elements.get(element);
+        if (mappedNode == null) {
+            Node child = new Node();
+            this.elements.put(element, child);
+            child.add(parts);
+        } else {
+            mappedNode.add(parts);
+        }
     }
 }

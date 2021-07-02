@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.github.alturkovic.url;
+package com.github.alturkovic.url.builder;
 
 import lombok.AccessLevel;
 import lombok.Getter;

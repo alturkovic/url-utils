@@ -22,53 +22,41 @@
  * SOFTWARE.
  */
 
-package com.github.alturkovic.url;
+package com.github.alturkovic.url.builder;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.Optional;
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+class UserInfo {
+    private String user;
+    private String password;
 
-import static java.net.URLDecoder.decode;
-import static java.nio.charset.StandardCharsets.UTF_8;
-
-@Data
-class UrlParameter {
-    private final String name;
-    private final String value;
-
-    static UrlParameter named(String name) {
-        return new UrlParameter(name, null);
-    }
-
-    static UrlParameter of(String name, String value) {
-        if (StringUtils.isBlank(value)) {
-            return named(name);
+    static UserInfo of(String userInfo) {
+        if (StringUtils.isBlank(userInfo)) {
+            return new UserInfo();
         }
 
-        return new UrlParameter(name, value);
-    }
-
-    static Optional<UrlParameter> parse(String param) {
-        String[] parts = param.split("=");
+        String[] parts = userInfo.split(":");
         if (parts.length == 1) {
-            String name = decode(parts[0], UTF_8);
-            return Optional.of(UrlParameter.named(name));
+            return withUser(parts[0]);
         }
 
-        if (parts.length == 2) {
-            String name = decode(parts[0], UTF_8);
-            String value = decode(parts[1], UTF_8);
-            return Optional.of(UrlParameter.of(name, value));
-        }
+        return new UserInfo(parts[0], parts[1]);
+    }
 
-        return Optional.empty();
+    static UserInfo withUser(String user) {
+        return new UserInfo(user, null);
     }
 
     public String format() {
-        if (StringUtils.isBlank(value)) {
-            return name;
+        if (StringUtils.isBlank(password)) {
+            return user;
         }
 
-        return String.join("=", name, value);
+        return String.join(":", user, password);
     }
 }

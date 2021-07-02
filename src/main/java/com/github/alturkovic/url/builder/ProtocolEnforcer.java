@@ -22,45 +22,36 @@
  * SOFTWARE.
  */
 
-package com.github.alturkovic.url;
+package com.github.alturkovic.url.builder;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import java.util.Optional;
 
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-final class UrlParseUtils {
-
-    static URL asUrl(String urlString) {
-        try {
-            return new URL(urlString);
-        } catch (MalformedURLException e) {
-            throw new IllegalArgumentException("Cannot parse url: " + urlString, e);
+class ProtocolEnforcer {
+    static String addProtocolIfMissing(String url, String protocol) {
+        if (url.startsWith("//")) {
+            return protocol + ":" + url;
         }
+
+        return extractProtocol(url)
+            .map(p -> {
+                if (!p.equals("http") && !p.equals("https")) {
+                    throw new IllegalArgumentException("Only http(s) protocols supported but found: " + p);
+                }
+                return url;
+            }).orElse(protocol + "://" + url);
     }
 
-    static URI asUri(URL url) {
-        try {
-            return new URI(
-                url.getProtocol(),
-                url.getUserInfo(),
-                url.getHost(),
-                url.getPort(),
-                url.getPath(),
-                url.getQuery(),
-                url.getRef()
-            );
-        } catch (URISyntaxException e) {
-            try {
-                return url.toURI();
-            } catch (URISyntaxException ignored) {
-                // fallback used for root based matrix-variables bug with Java URI
+    private static Optional<String> extractProtocol(String url) {
+        StringBuilder found = new StringBuilder();
+        for (char c : url.toCharArray()) {
+            found.append(c);
+
+            if (c == '/' && found.toString().endsWith("://")) {
+                found.setLength(found.length() - 3);
+                return Optional.of(found.toString());
             }
-            throw new IllegalArgumentException("Cannot parse uri: " + url, e);
         }
+
+        return Optional.empty();
     }
 }

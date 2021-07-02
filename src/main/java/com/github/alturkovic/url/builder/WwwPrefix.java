@@ -22,51 +22,24 @@
  * SOFTWARE.
  */
 
-package com.github.alturkovic.url;
+package com.github.alturkovic.url.builder;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-final class StringUtils {
-
-    static boolean endsWith(String text, String suffix) {
-        return text != null && text.endsWith(suffix);
-    }
-
-    static String removePrefix(String text, String prefix) {
-        if (hasText(text) && text.startsWith(prefix)) {
-            return text.substring(prefix.length());
+enum WwwPrefix {
+    INCLUDE {
+        @Override
+        String normalizeHost(String host) {
+            return StringUtils.addPrefix("www.", host);
         }
+    }, EXCLUDE {
+        @Override
+        String normalizeHost(String host) {
+            if (host.startsWith("www.") && host.indexOf('.', 4) != -1) {
+                return host.substring(4);
+            }
 
-        return text;
-    }
-
-    static String removeSuffix(String text, String suffix) {
-        if (hasText(text) && text.endsWith(suffix)) {
-            return text.substring(0, text.lastIndexOf(suffix));
+            return host;
         }
+    };
 
-        return text;
-    }
-
-    static String addPrefix(String prefix, String text) {
-        if (isBlank(text)) {
-            return prefix;
-        }
-
-        if (text.startsWith(prefix)) {
-            return text;
-        }
-
-        return prefix + text;
-    }
-
-    static boolean hasText(String text) {
-        return !isBlank(text);
-    }
-
-    static boolean isBlank(String text) {
-        return text == null || text.isBlank();
-    }
+    abstract String normalizeHost(String host);
 }

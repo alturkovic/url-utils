@@ -7,8 +7,11 @@ The library can be used to build URI instances or to parse already built URI ins
 The main API classes are:
  - `UrlBuilder` - to build new URI instances
  - `UrlParser` - to extract information from URI instances
+ - `UrlMatcher` - to check if URI is under any registered URI
 
 ## Examples
+
+### Building
 
 1. Add path or query parameters using lambdas.
 ```java
@@ -39,20 +42,33 @@ System.out.println(UrlBuilder.of("localhost")
     .build()); // https://localhost:8080/person;name=John;age=25/search?q=phrase
 ```
 
-4. Extract URL components.
+### Parse
+
+1. Extract URL components.
 ```java
-UrlParser parsed = UrlParser.of("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
-System.out.println(parsed.getQueryParameters()); // {v=[dQw4w9WgXcQ]}
-System.out.println(parsed.getPort()); // 443
+UrlParser parser = UrlParser.of("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+System.out.println(parser.getQueryParameters()); // {v=[dQw4w9WgXcQ]}
+System.out.println(parser.getPort()); // 443
 ```
-5. Parse un-encoded URLs.
+2. Parse un-encoded URLs.
 ```java
 URI uri = UrlParser.parse("example.com/a b"); // https://example.com/a%20b
 ```
 
-6. Extract file type.
+3. Extract file type.
 ```java
 System.out.println(UrlParser.of("localhost/api/data.csv").getFileType()); // csv
+```
+
+### Match
+
+```java
+UrlMatcher matcher = new UrlMatcher();
+matcher.register(UrlParser.parse("example.com/a/b"));
+System.out.println(matcher.matches(UrlParser.parse("example.com/a/b"))); // true
+System.out.println(matcher.matches(UrlParser.parse("example.com/a/b/c"))); // true
+System.out.println(matcher.matches(UrlParser.parse("example.com/b"))); // false
+System.out.println(matcher.matches(UrlParser.parse("another.com"))); // false
 ```
 
 ## Importing into your project using Maven
@@ -77,7 +93,7 @@ Add the following under your `<dependencies>`:
     <dependency>
         <groupId>com.github.alturkovic</groupId>
         <artifactId>url-utils</artifactId>
-        <version>1.0.6</version>
+        <version>1.1.0</version>
     </dependency>
 </dependencies>
 ```

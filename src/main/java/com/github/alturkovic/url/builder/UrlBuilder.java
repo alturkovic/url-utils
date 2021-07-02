@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.github.alturkovic.url;
+package com.github.alturkovic.url.builder;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -33,11 +33,11 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.function.Consumer;
 
-import static com.github.alturkovic.url.ProtocolEnforcer.addProtocolIfMissing;
-import static com.github.alturkovic.url.StringUtils.endsWith;
-import static com.github.alturkovic.url.StringUtils.hasText;
-import static com.github.alturkovic.url.UrlParseUtils.asUri;
-import static com.github.alturkovic.url.UrlParseUtils.asUrl;
+import static com.github.alturkovic.url.builder.ProtocolEnforcer.addProtocolIfMissing;
+import static com.github.alturkovic.url.builder.StringUtils.endsWith;
+import static com.github.alturkovic.url.builder.StringUtils.hasText;
+import static com.github.alturkovic.url.builder.UrlParseUtils.asUri;
+import static com.github.alturkovic.url.builder.UrlParseUtils.asUrl;
 
 /**
  * Used to build urls as {@link URI}s.
