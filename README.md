@@ -1,19 +1,20 @@
 ![Release](https://jitpack.io/v/alturkovic/url-utils.svg)
 
-`url-utils` library can be used to create or modify urls in Java.
+`url-utils` helps you operate with URLs in Java.
 
-The library can be used to build URI instances or to parse already built URI instances to extract data from them.
+The library can be used to build, parse, compare, etc. URI instances.
 
 The main API classes are:
  - `UrlBuilder` - to build new URI instances
  - `UrlParser` - to extract information from URI instances
  - `UrlMatcher` - to check if URI is under any registered URI
+ - `UrlEquals` - to check if 2 URIs are equal
 
 ## Examples
 
 ### Building
 
-1. Add path or query parameters using lambdas.
+1. Add path or query parameters using lambda builders.
 ```java
 System.out.println(UrlBuilder.of("www.youtube.com")
     .host(HostBuilder::withoutWww)
@@ -22,7 +23,7 @@ System.out.println(UrlBuilder.of("www.youtube.com")
     .build()); // https://youtube.com/watch?v=dQw4w9WgXcQ
 ```
 
-2. Remove URL components other than host.
+2. Remove URL components except the protocol and the host.
 ```java
 System.out.println(UrlBuilder.of("https://stackoverflow.com/questions/1732348/regex-match-open-tags-except-xhtml-self-contained-tags/1732454#1732454")
     .strip()
@@ -49,6 +50,7 @@ System.out.println(UrlBuilder.of("localhost")
 UrlParser parser = UrlParser.of("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
 System.out.println(parser.getQueryParameters()); // {v=[dQw4w9WgXcQ]}
 System.out.println(parser.getPort()); // 443
+
 ```
 2. Parse un-encoded URLs.
 ```java
@@ -70,6 +72,17 @@ System.out.println(matcher.matches(UrlParser.parse("example.com/a/b"))); // true
 System.out.println(matcher.matches(UrlParser.parse("example.com/a/b/c"))); // true
 System.out.println(matcher.matches(UrlParser.parse("example.com/b"))); // false
 System.out.println(matcher.matches(UrlParser.parse("another.com"))); // false
+```
+
+### Equals
+
+`URL.equals` is [broken](https://stackoverflow.com/questions/3771081/proper-way-to-check-for-url-equality/).
+
+```java
+URI source = UrlParser.parse("http://example.com");
+URI target = UrlParser.parse("http://example.com:80/");
+System.out.println(source.equals(target)); // false
+System.out.println(UrlEquals.areUrlsEqual(source, target)); // true
 ```
 
 ## Importing into your project using Maven
@@ -94,7 +107,7 @@ Add the following under your `<dependencies>`:
     <dependency>
         <groupId>com.github.alturkovic</groupId>
         <artifactId>url-utils</artifactId>
-        <version>1.1.0</version>
+        <version>1.2.0</version>
     </dependency>
 </dependencies>
 ```

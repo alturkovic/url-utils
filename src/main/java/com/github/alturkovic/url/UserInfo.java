@@ -25,10 +25,10 @@
 package com.github.alturkovic.url;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 class UserInfo {
