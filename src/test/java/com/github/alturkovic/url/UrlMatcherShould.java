@@ -22,11 +22,11 @@
  * SOFTWARE.
  */
 
-package com.github.alturkovic.url.matcher;
+package com.github.alturkovic.url;
 
 import org.junit.jupiter.api.Test;
 
-import static com.github.alturkovic.url.builder.UrlParser.parse;
+import static com.github.alturkovic.url.UrlParser.parse;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UrlMatcherShould {

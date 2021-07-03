@@ -22,9 +22,8 @@
  * SOFTWARE.
  */
 
-package com.github.alturkovic.url.builder;
+package com.github.alturkovic.url;
 
-import com.github.alturkovic.url.builder.HostBuilder;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

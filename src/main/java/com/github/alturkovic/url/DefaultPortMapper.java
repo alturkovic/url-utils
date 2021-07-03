@@ -22,45 +22,16 @@
  * SOFTWARE.
  */
 
-package com.github.alturkovic.url.matcher;
+package com.github.alturkovic.url;
 
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.Map;
-
-class Node {
-    private final Map<String, Node> elements = new HashMap<>(0);
-    private boolean matcher;
-
-    public boolean contains(Deque<String> parts) {
-        if (matcher) {
-            return true;
+class DefaultPortMapper {
+    static int getDefaultPort(String protocol) {
+        if (protocol.equals("http")) {
+            return 80;
+        } else if (protocol.equals("https")) {
+            return 443;
         }
 
-        String element = parts.pop();
-        Node node = elements.get(element);
-        if (node == null) {
-            return false;
-        }
-
-        return node.contains(parts);
-    }
-
-    public void add(Deque<String> parts) {
-        if (parts.isEmpty()) {
-            matcher = true;
-            return;
-        }
-
-        String element = parts.pop();
-
-        Node mappedNode = this.elements.get(element);
-        if (mappedNode == null) {
-            Node child = new Node();
-            this.elements.put(element, child);
-            child.add(parts);
-        } else {
-            mappedNode.add(parts);
-        }
+        throw new IllegalArgumentException("Cannot determine port for protocol: " + protocol);
     }
 }

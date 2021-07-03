@@ -22,53 +22,36 @@
  * SOFTWARE.
  */
 
-package com.github.alturkovic.url.builder;
-
-import lombok.Data;
+package com.github.alturkovic.url;
 
 import java.util.Optional;
 
-import static java.net.URLDecoder.decode;
-import static java.nio.charset.StandardCharsets.UTF_8;
-
-@Data
-class UrlParameter {
-    private final String name;
-    private final String value;
-
-    static UrlParameter named(String name) {
-        return new UrlParameter(name, null);
-    }
-
-    static UrlParameter of(String name, String value) {
-        if (StringUtils.isBlank(value)) {
-            return named(name);
+class ProtocolEnforcer {
+    static String addProtocolIfMissing(String url, String protocol) {
+        if (url.startsWith("//")) {
+            return protocol + ":" + url;
         }
 
-        return new UrlParameter(name, value);
+        return extractProtocol(url)
+            .map(p -> {
+                if (!p.equals("http") && !p.equals("https")) {
+                    throw new IllegalArgumentException("Only http(s) protocols supported but found: " + p);
+                }
+                return url;
+            }).orElse(protocol + "://" + url);
     }
 
-    static Optional<UrlParameter> parse(String param) {
-        String[] parts = param.split("=");
-        if (parts.length == 1) {
-            String name = decode(parts[0], UTF_8);
-            return Optional.of(UrlParameter.named(name));
-        }
+    private static Optional<String> extractProtocol(String url) {
+        StringBuilder found = new StringBuilder();
+        for (char c : url.toCharArray()) {
+            found.append(c);
 
-        if (parts.length == 2) {
-            String name = decode(parts[0], UTF_8);
-            String value = decode(parts[1], UTF_8);
-            return Optional.of(UrlParameter.of(name, value));
+            if (c == '/' && found.toString().endsWith("://")) {
+                found.setLength(found.length() - 3);
+                return Optional.of(found.toString());
+            }
         }
 
         return Optional.empty();
-    }
-
-    public String format() {
-        if (StringUtils.isBlank(value)) {
-            return name;
-        }
-
-        return String.join("=", name, value);
     }
 }

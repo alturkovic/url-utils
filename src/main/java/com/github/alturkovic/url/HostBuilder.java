@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.github.alturkovic.url.builder;
+package com.github.alturkovic.url;
 
 public class HostBuilder {
     private String host;

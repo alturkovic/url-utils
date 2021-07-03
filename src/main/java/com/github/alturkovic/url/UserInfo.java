@@ -22,24 +22,41 @@
  * SOFTWARE.
  */
 
-package com.github.alturkovic.url.builder;
+package com.github.alturkovic.url;
 
-enum WwwPrefix {
-    INCLUDE {
-        @Override
-        String normalizeHost(String host) {
-            return StringUtils.addPrefix("www.", host);
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+class UserInfo {
+    private String user;
+    private String password;
+
+    static UserInfo of(String userInfo) {
+        if (StringUtils.isBlank(userInfo)) {
+            return new UserInfo();
         }
-    }, EXCLUDE {
-        @Override
-        String normalizeHost(String host) {
-            if (host.startsWith("www.") && host.indexOf('.', 4) != -1) {
-                return host.substring(4);
-            }
 
-            return host;
+        String[] parts = userInfo.split(":");
+        if (parts.length == 1) {
+            return withUser(parts[0]);
         }
-    };
 
-    abstract String normalizeHost(String host);
+        return new UserInfo(parts[0], parts[1]);
+    }
+
+    static UserInfo withUser(String user) {
+        return new UserInfo(user, null);
+    }
+
+    public String format() {
+        if (StringUtils.isBlank(password)) {
+            return user;
+        }
+
+        return String.join(":", user, password);
+    }
 }

@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.github.alturkovic.url.builder;
+package com.github.alturkovic.url;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -32,12 +32,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.function.Consumer;
-
-import static com.github.alturkovic.url.builder.ProtocolEnforcer.addProtocolIfMissing;
-import static com.github.alturkovic.url.builder.StringUtils.endsWith;
-import static com.github.alturkovic.url.builder.StringUtils.hasText;
-import static com.github.alturkovic.url.builder.UrlParseUtils.asUri;
-import static com.github.alturkovic.url.builder.UrlParseUtils.asUrl;
 
 /**
  * Used to build urls as {@link URI}s.
@@ -76,16 +70,16 @@ public class UrlBuilder {
         builder.path = PathBuilder.of(uri.getRawPath());
         builder.query = ParameterBuilder.of(uri.getRawQuery(), "&");
 
-        if (hasText(uri.getRawFragment())) {
-            if (endsWith(uri.getRawFragment(), "/")) {
+        if (StringUtils.hasText(uri.getRawFragment())) {
+            if (StringUtils.endsWith(uri.getRawFragment(), "/")) {
                 builder.appendTrailingSlash = true;
             }
-        } else if (hasText(uri.getRawQuery())) {
-            if (endsWith(uri.getRawQuery(), "/")) {
+        } else if (StringUtils.hasText(uri.getRawQuery())) {
+            if (StringUtils.endsWith(uri.getRawQuery(), "/")) {
                 builder.appendTrailingSlash = true;
             }
-        } else if (hasText(uri.getRawPath())) {
-            if (endsWith(uri.getRawPath(), "/")) {
+        } else if (StringUtils.hasText(uri.getRawPath())) {
+            if (StringUtils.endsWith(uri.getRawPath(), "/")) {
                 builder.appendTrailingSlash = true;
             }
         }
@@ -102,9 +96,9 @@ public class UrlBuilder {
      * @return builder instance
      */
     public static UrlBuilder of(String urlString) {
-        urlString = addProtocolIfMissing(urlString, DEFAULT_PROTOCOL);
-        URL url = asUrl(urlString);
-        URI uri = asUri(url);
+        urlString = ProtocolEnforcer.addProtocolIfMissing(urlString, DEFAULT_PROTOCOL);
+        URL url = UrlParseUtils.asUrl(urlString);
+        URI uri = UrlParseUtils.asUri(url);
         return of(uri);
     }
 
@@ -353,13 +347,13 @@ public class UrlBuilder {
 
             // Java URI has trailingSlash on the last defined component
             if (appendTrailingSlash) {
-                if (hasText(definedFragment)) {
+                if (StringUtils.hasText(definedFragment)) {
                     definedFragment += "/";
-                } else if (hasText(builtQuery)) {
+                } else if (StringUtils.hasText(builtQuery)) {
                     builtQuery += "/";
                 } else if (builtPath == null) {
                     builtPath = "/";
-                } else if (!endsWith(builtPath, "/")) {
+                } else if (!StringUtils.endsWith(builtPath, "/")) {
                     builtPath += "/";
                 }
             } else {

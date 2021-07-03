@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.github.alturkovic.url.builder;
+package com.github.alturkovic.url;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -31,6 +31,7 @@ import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.github.alturkovic.url.DefaultPortMapper.getDefaultPort;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 
@@ -108,12 +109,7 @@ public class UrlParser {
         int port = builder.getPort();
 
         if (port == -1) {
-            String protocol = getProtocol();
-            if (protocol.equals("http")) {
-                return 80;
-            } else if (protocol.equals("https")) {
-                return 443;
-            }
+            return getDefaultPort(getProtocol());
         }
 
         return port;

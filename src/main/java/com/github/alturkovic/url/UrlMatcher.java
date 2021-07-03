@@ -22,15 +22,13 @@
  * SOFTWARE.
  */
 
-package com.github.alturkovic.url.matcher;
-
-import com.github.alturkovic.url.builder.HostBuilder;
-import com.github.alturkovic.url.builder.UrlBuilder;
-import com.github.alturkovic.url.builder.UrlParser;
+package com.github.alturkovic.url;
 
 import java.net.URI;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * Check if {@link URI} matches any of the registered {@link URI}s paths.
@@ -68,5 +66,42 @@ public class UrlMatcher {
         elements.add(parser.getHost());
         parser.getPathSegments().ifPresent(elements::addAll);
         return elements;
+    }
+    
+    private static class Node {
+        private final Map<String, Node> elements = new HashMap<>(0);
+        private boolean matcher;
+
+        public boolean contains(Deque<String> parts) {
+            if (matcher) {
+                return true;
+            }
+
+            String element = parts.pop();
+            Node node = elements.get(element);
+            if (node == null) {
+                return false;
+            }
+
+            return node.contains(parts);
+        }
+
+        public void add(Deque<String> parts) {
+            if (parts.isEmpty()) {
+                matcher = true;
+                return;
+            }
+
+            String element = parts.pop();
+
+            Node mappedNode = this.elements.get(element);
+            if (mappedNode == null) {
+                Node child = new Node();
+                this.elements.put(element, child);
+                child.add(parts);
+            } else {
+                mappedNode.add(parts);
+            }
+        }
     }
 }

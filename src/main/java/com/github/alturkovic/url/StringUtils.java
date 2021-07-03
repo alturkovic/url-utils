@@ -22,36 +22,51 @@
  * SOFTWARE.
  */
 
-package com.github.alturkovic.url.builder;
+package com.github.alturkovic.url;
 
-import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-class ProtocolEnforcer {
-    static String addProtocolIfMissing(String url, String protocol) {
-        if (url.startsWith("//")) {
-            return protocol + ":" + url;
-        }
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+final class StringUtils {
 
-        return extractProtocol(url)
-            .map(p -> {
-                if (!p.equals("http") && !p.equals("https")) {
-                    throw new IllegalArgumentException("Only http(s) protocols supported but found: " + p);
-                }
-                return url;
-            }).orElse(protocol + "://" + url);
+    static boolean endsWith(String text, String suffix) {
+        return text != null && text.endsWith(suffix);
     }
 
-    private static Optional<String> extractProtocol(String url) {
-        StringBuilder found = new StringBuilder();
-        for (char c : url.toCharArray()) {
-            found.append(c);
-
-            if (c == '/' && found.toString().endsWith("://")) {
-                found.setLength(found.length() - 3);
-                return Optional.of(found.toString());
-            }
+    static String removePrefix(String text, String prefix) {
+        if (hasText(text) && text.startsWith(prefix)) {
+            return text.substring(prefix.length());
         }
 
-        return Optional.empty();
+        return text;
+    }
+
+    static String removeSuffix(String text, String suffix) {
+        if (hasText(text) && text.endsWith(suffix)) {
+            return text.substring(0, text.lastIndexOf(suffix));
+        }
+
+        return text;
+    }
+
+    static String addPrefix(String prefix, String text) {
+        if (isBlank(text)) {
+            return prefix;
+        }
+
+        if (text.startsWith(prefix)) {
+            return text;
+        }
+
+        return prefix + text;
+    }
+
+    static boolean hasText(String text) {
+        return !isBlank(text);
+    }
+
+    static boolean isBlank(String text) {
+        return text == null || text.isBlank();
     }
 }
