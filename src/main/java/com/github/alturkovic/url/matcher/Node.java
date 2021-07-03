@@ -33,14 +33,14 @@ class Node {
     private boolean matcher;
 
     public boolean contains(Deque<String> parts) {
+        if (matcher) {
+            return true;
+        }
+
         String element = parts.pop();
         Node node = elements.get(element);
         if (node == null) {
-            return matcher;
-        }
-
-        if (parts.isEmpty()) {
-            return node.matcher;
+            return false;
         }
 
         return node.contains(parts);
