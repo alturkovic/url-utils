@@ -30,12 +30,13 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
 /**
  * Used to build parameters. The delimiter determines what type of query it builds.
  * <p>
- * It can be used to either build the query parameters or path matrix parameters
+ * It can be used to either build the query parameters or path matrix parameters.
  */
 @Getter(AccessLevel.PACKAGE)
 public class ParameterBuilder {
@@ -140,6 +141,19 @@ public class ParameterBuilder {
      */
     public ParameterBuilder remove(List<String> parameters) {
         this.parameters.removeIf(parameter -> parameters.contains(parameter.getName()));
+        return this;
+    }
+
+    /**
+     * Remove parameters matching {@code condition}.
+     * <p>
+     * {@code condition} is a key-value pair.
+     *
+     * @param condition to evaluate which parameters to remove
+     * @return this builder
+     */
+    public ParameterBuilder removeBy(BiPredicate<String, String> condition) {
+        parameters.removeIf(parameter -> condition.test(parameter.getName(), parameter.getValue()));
         return this;
     }
 

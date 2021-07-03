@@ -33,6 +33,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static java.net.URLDecoder.decode;
@@ -163,6 +164,17 @@ public class PathBuilder {
      */
     public PathBuilder remove(int index) {
         this.pathSegments.remove(index);
+        return this;
+    }
+
+    /**
+     * Remove path segments matching {@code condition}.
+     *
+     * @param condition to evaluate which segments to remove
+     * @return this builder
+     */
+    public PathBuilder removeBy(Predicate<String> condition) {
+        this.pathSegments.removeIf(pathSegment -> condition.test(pathSegment.getPath()));
         return this;
     }
 

@@ -29,6 +29,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -116,6 +117,30 @@ class UrlParserShould {
     void getEmptyQueryParameters() {
         Map<String, List<String>> parameters = UrlParser.of("localhost:8080").getQueryParameters();
         assertThat(parameters).isEmpty();
+    }
+
+    @Test
+    void getNamedQueryParameters() {
+        List<String> parameters = UrlParser.of("localhost:8080?a=1&b=2&b&a=3").getQueryParameters("a");
+        assertThat(parameters).containsExactly("1", "3");
+    }
+
+    @Test
+    void getEmptyNamedQueryParameters() {
+        List<String> parameters = UrlParser.of("localhost:8080?a=1&b=2&b&a=3").getQueryParameters("c");
+        assertThat(parameters).isEmpty();
+    }
+
+    @Test
+    void getNamedQueryParameter() {
+        Optional<String> parameter = UrlParser.of("localhost:8080?a=1&b=2&b&a=3").getQueryParameter("a");
+        assertThat(parameter).isPresent().contains("1");
+    }
+
+    @Test
+    void getEmptyNamedQueryParameter() {
+        Optional<String> parameter = UrlParser.of("localhost:8080?a=1&b=2&b&a=3").getQueryParameter("c");
+        assertThat(parameter).isEmpty();
     }
 
     @Test

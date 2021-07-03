@@ -76,4 +76,18 @@ class ParameterBuilderShould {
         parameter.remove(List.of("b", "c"));
         assertThat(parameter.build("&")).isEqualTo("d=5");
     }
+
+    @Test
+    void removeParametersByNameCondition() {
+        ParameterBuilder parameter = ParameterBuilder.of("a=1&a&b=2&c=3&c=4&d=5", "&");
+        parameter.removeBy((name, value) -> "a".equals(name));
+        assertThat(parameter.build("&")).isEqualTo("b=2&c=3&c=4&d=5");
+    }
+
+    @Test
+    void removeParametersByValueCondition() {
+        ParameterBuilder parameter = ParameterBuilder.of("a=1&a&b=2&c=3&c=2&d=2", "&");
+        parameter.removeBy((name, value) -> "2".equals(value));
+        assertThat(parameter.build("&")).isEqualTo("a=1&a&c=3");
+    }
 }

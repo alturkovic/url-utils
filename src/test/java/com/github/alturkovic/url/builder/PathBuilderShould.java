@@ -74,6 +74,13 @@ class PathBuilderShould {
     }
 
     @Test
+    void removeByCondition() {
+        PathBuilder path = PathBuilder.of("/a/b/c/a/c");
+        path.removeBy("a"::equals);
+        assertThat(path.build()).isEqualTo("/b/c/c");
+    }
+
+    @Test
     void modifyMatrixParameters() {
         assertThat(PathBuilder.of("").parameters(params -> params
             .set("a", "1")

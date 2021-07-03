@@ -31,6 +31,7 @@ import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 
 /**
@@ -161,6 +162,26 @@ public class UrlParser {
      */
     public Map<String, List<String>> getQueryParameters() {
         return asParameterMap(builder.getQuery().getParameters());
+    }
+
+    /**
+     * Get parameter values for {@code name} parameter.
+     *
+     * @param name of the parameter
+     * @return {@code name} parameter values
+     */
+    public List<String> getQueryParameters(String name) {
+        return getQueryParameters().getOrDefault(name, emptyList());
+    }
+
+    /**
+     * Get first parameter value for {@code name} parameter.
+     *
+     * @param name of the parameter
+     * @return first {@code name} parameter value
+     */
+    public Optional<String> getQueryParameter(String name) {
+        return getQueryParameters(name).stream().findFirst();
     }
 
     /**
