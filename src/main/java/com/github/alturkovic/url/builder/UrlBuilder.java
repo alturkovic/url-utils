@@ -324,7 +324,7 @@ public class UrlBuilder {
     }
 
     /**
-     * Exclude everything except the host.
+     * Exclude everything except the host and the protocol.
      *
      * @return this builder
      */
