@@ -62,6 +62,7 @@ System.out.println(UrlParser.of("localhost/api/data.csv").getFileType()); // csv
 
 ### Match
 
+Check if URI is located on a path of any URI previously registered.
 ```java
 UrlMatcher matcher = new UrlMatcher();
 matcher.register(UrlParser.parse("example.com/a/b"));
