@@ -72,35 +72,35 @@ public class UrlMatcher {
         private final Map<String, Node> elements = new HashMap<>(0);
         private boolean matcher;
 
-        public boolean contains(Deque<String> parts) {
+        public boolean contains(Deque<String> elements) {
             if (matcher) {
                 return true;
             }
 
-            String element = parts.pop();
-            Node node = elements.get(element);
-            if (node == null) {
+            String element = elements.pop();
+            Node elementNode = this.elements.get(element);
+            if (elementNode == null) {
                 return false;
             }
 
-            return node.contains(parts);
+            return elementNode.contains(elements);
         }
 
-        public void add(Deque<String> parts) {
-            if (parts.isEmpty()) {
+        public void add(Deque<String> elements) {
+            if (elements.isEmpty()) {
                 matcher = true;
                 return;
             }
 
-            String element = parts.pop();
+            String element = elements.pop();
 
-            Node mappedNode = this.elements.get(element);
-            if (mappedNode == null) {
+            Node elementNode = this.elements.get(element);
+            if (elementNode == null) {
                 Node child = new Node();
                 this.elements.put(element, child);
-                child.add(parts);
+                child.add(elements);
             } else {
-                mappedNode.add(parts);
+                elementNode.add(elements);
             }
         }
     }
