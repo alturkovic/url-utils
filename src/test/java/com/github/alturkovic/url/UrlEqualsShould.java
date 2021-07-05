@@ -48,6 +48,13 @@ class UrlEqualsShould {
     }
 
     @Test
+    void equalWithSpecificPort() {
+        URI source = URI.create("https://example.com:8080");
+        URI target = URI.create("https://example.com:8080");
+        assertThat(areUrlsEqual(source, target)).isTrue();
+    }
+
+    @Test
     void equalWithTrailingSlash() {
         URI source = URI.create("https://example.com");
         URI target = URI.create("https://example.com/");
