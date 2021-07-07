@@ -28,6 +28,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiPredicate;
@@ -79,6 +80,20 @@ public class ParameterBuilder {
     }
 
     /**
+     * Add a parameter with values.
+     *
+     * @param name  of the parameter
+     * @param values of the parameter
+     * @return this builder
+     */
+    public ParameterBuilder addAll(String name, Collection<String> values) {
+        for (String value : values) {
+            add(name, value);
+        }
+        return this;
+    }
+
+    /**
      * Add all parameters from {@code parameters} with an optional value.
      *
      * @param parameters to add
@@ -86,6 +101,17 @@ public class ParameterBuilder {
      */
     public ParameterBuilder add(Map<String, String> parameters) {
         parameters.forEach(this::add);
+        return this;
+    }
+
+    /**
+     * Add all parameters from {@code parameters} with optional values.
+     *
+     * @param parameters to add
+     * @return this builder
+     */
+    public ParameterBuilder addAll(Map<String, List<String>> parameters) {
+        parameters.forEach(this::addAll);
         return this;
     }
 

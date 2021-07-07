@@ -56,6 +56,14 @@ class ParameterBuilderShould {
     }
 
     @Test
+    void addParameters() {
+        ParameterBuilder parameter = ParameterBuilder.of("a=1", "&");
+        parameter.addAll("a", List.of("2", "3"));
+        parameter.addAll(Map.of("b", List.of("4", "5")));
+        assertThat(parameter.build("&")).isEqualTo("a=1&a=2&a=3&b=4&b=5");
+    }
+
+    @Test
     void setParameter() {
         ParameterBuilder parameter = ParameterBuilder.of("a=1&a&b=2&c=3&c=4", "&");
         parameter.set("a");

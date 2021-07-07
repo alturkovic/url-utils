@@ -79,14 +79,14 @@ class UrlParserShould {
 
     @Test
     void getPath() {
-        assertThat(UrlParser.of("localhost:8080/api/test").getPath())
+        assertThat(UrlParser.of("localhost:8080/api/test?q=1").getPath())
             .isPresent().get()
             .isEqualTo("/api/test");
     }
 
     @Test
     void getPathSegments() {
-        assertThat(UrlParser.of("localhost:8080/api/test").getPathSegments())
+        assertThat(UrlParser.of("localhost:8080/api/test?q=1").getPathSegments())
             .isPresent().get().asList()
             .containsExactly("api", "test");
     }
@@ -164,6 +164,33 @@ class UrlParserShould {
     void getEmptyMatrixParameters() {
         Map<String, List<String>> parameters = UrlParser.of("localhost:8080").getMatrixParameters("/");
         assertThat(parameters).isEmpty();
+    }
+
+    @Test
+    void getParametrizedQuery() {
+        assertThat(UrlParser.of("localhost:8080/api?a=1&b=2/").getParametrizedQuery())
+            .isPresent().get()
+            .isEqualTo("/api?a=1&b=2");
+    }
+
+    @Test
+    void getParametrizedQueryWithoutPath() {
+        assertThat(UrlParser.of("localhost:8080/?a=1&b=2/").getParametrizedQuery())
+            .isPresent().get()
+            .isEqualTo("/?a=1&b=2");
+    }
+
+    @Test
+    void getParametrizedQueryWithoutQuery() {
+        assertThat(UrlParser.of("localhost:8080/api").getParametrizedQuery())
+            .isPresent().get()
+            .isEqualTo("/api");
+    }
+
+    @Test
+    void getEmptyParametrizedQueryWithoutPathAndQuery() {
+        assertThat(UrlParser.of("localhost:8080").getParametrizedQuery())
+            .isEmpty();
     }
 
     @Test

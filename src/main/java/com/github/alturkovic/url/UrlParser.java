@@ -208,6 +208,29 @@ public class UrlParser {
     }
 
     /**
+     * Get the path with query from the initialized url.
+     *
+     * @return the path
+     */
+    public Optional<String> getParametrizedQuery() {
+        StringBuilder parametrizedQuery = new StringBuilder();
+
+        getPath().ifPresent(parametrizedQuery::append);
+
+        Map<String, List<String>> queryParameters = getQueryParameters();
+        if (!queryParameters.isEmpty()) {
+            parametrizedQuery.append("?");
+            parametrizedQuery.append(new ParameterBuilder().addAll(queryParameters).build("&"));
+        }
+
+        if (parametrizedQuery.length() == 0) {
+            return Optional.empty();
+        }
+
+        return Optional.of(parametrizedQuery.toString());
+    }
+
+    /**
      * Get the file of the initialized url.
      *
      * @return file
