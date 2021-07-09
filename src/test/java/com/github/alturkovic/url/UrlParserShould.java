@@ -26,11 +26,13 @@ package com.github.alturkovic.url;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
+import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UrlParserShould {
@@ -144,20 +146,25 @@ class UrlParserShould {
     }
 
     @Test
-    void getMatrixParameters() {
+    void getMatrixParametersByPath() {
         UrlParser parser = UrlParser.of("localhost:8080/first;a=1;b=2;b=3/second;c=1;d;d=2");
 
-        Map<String, List<String>> firstParameters = parser.getMatrixParameters("first");
-        assertThat(firstParameters).containsExactlyInAnyOrderEntriesOf(Map.of(
-            "a", List.of("1"),
-            "b", List.of("2", "3")
-        ));
+        Map<String, List<String>> secondParameters = parser.getMatrixParameters("first/second");
+        assertThat(secondParameters.entrySet()).containsExactlyInAnyOrder(
+            new AbstractMap.SimpleEntry<>("c", singletonList("1")),
+            new AbstractMap.SimpleEntry<>("d", asList(null, "2"))
+        );
+    }
 
-        Map<String, List<String>> secondParameters = parser.getMatrixParameters(List.of("first", "second"));
-        assertThat(secondParameters).containsExactlyInAnyOrderEntriesOf(Map.of(
-            "c", List.of("1"),
-            "d", Arrays.asList(null, "2")
-        ));
+    @Test
+    void getMatrixParametersByPathSegments() {
+        UrlParser parser = UrlParser.of("localhost:8080/first;a=1;b=2;b=3/second;c=1;d;d=2");
+
+        Map<String, List<String>> secondParameters = parser.getMatrixParameters(asList("first", "second"));
+        assertThat(secondParameters.entrySet()).containsExactlyInAnyOrder(
+            new AbstractMap.SimpleEntry<>("c", singletonList("1")),
+            new AbstractMap.SimpleEntry<>("d", asList(null, "2"))
+        );
     }
 
     @Test

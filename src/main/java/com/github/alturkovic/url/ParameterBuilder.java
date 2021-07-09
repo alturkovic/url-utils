@@ -34,6 +34,8 @@ import java.util.Map;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
+import static java.util.Collections.singletonList;
+
 /**
  * Used to build parameters. The delimiter determines what type of query it builds.
  * <p>
@@ -156,7 +158,7 @@ public class ParameterBuilder {
      * @return this builder
      */
     public ParameterBuilder remove(String name) {
-        return remove(List.of(name));
+        return remove(singletonList(name));
     }
 
     /**

@@ -26,11 +26,10 @@ package com.github.alturkovic.url;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.net.*;
+import java.nio.charset.Charset;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class UrlParseUtils {
@@ -62,5 +61,10 @@ final class UrlParseUtils {
             }
             throw new IllegalArgumentException("Cannot parse uri: " + url, e);
         }
+    }
+
+    @SneakyThrows
+    static String decode(String url, Charset charset) {
+        return URLDecoder.decode(url, charset.name());
     }
 }

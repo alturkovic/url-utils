@@ -36,8 +36,9 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static java.net.URLDecoder.decode;
+import static com.github.alturkovic.url.UrlParseUtils.decode;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 
 /**
  * Used to build the URL path.
@@ -67,7 +68,7 @@ public class PathBuilder {
      * @return this builder
      */
     public PathBuilder addSegment(String pathSegment) {
-        return add(List.of(pathSegment));
+        return add(singletonList(pathSegment));
     }
 
     /**
@@ -105,7 +106,7 @@ public class PathBuilder {
      */
     public PathBuilder set(String path) {
         clear();
-        return add(List.of(path));
+        return add(singletonList(path));
     }
 
     /**

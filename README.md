@@ -1,6 +1,6 @@
 ![Release](https://jitpack.io/v/alturkovic/url-utils.svg)
 
-`url-utils` helps you operate with URLs in Java.
+`url-utils` helps you operate with URLs in Java. (Requires Java 8+)
 
 The library can be used to build, parse, compare, etc. URI instances.
 
@@ -107,7 +107,7 @@ Add the following under your `<dependencies>`:
     <dependency>
         <groupId>com.github.alturkovic</groupId>
         <artifactId>url-utils</artifactId>
-        <version>1.2.1</version>
+        <version>1.3.0</version>
     </dependency>
 </dependencies>
 ```

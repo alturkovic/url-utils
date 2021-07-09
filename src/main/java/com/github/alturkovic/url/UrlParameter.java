@@ -28,7 +28,7 @@ import lombok.Data;
 
 import java.util.Optional;
 
-import static java.net.URLDecoder.decode;
+import static com.github.alturkovic.url.UrlParseUtils.decode;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Data

@@ -67,6 +67,6 @@ final class StringUtils {
     }
 
     static boolean isBlank(String text) {
-        return text == null || text.isBlank();
+        return text == null || text.trim().equals("");
     }
 }

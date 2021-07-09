@@ -26,9 +26,8 @@ package com.github.alturkovic.url;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-import java.util.Map;
-
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ParameterBuilderShould {
@@ -51,15 +50,15 @@ class ParameterBuilderShould {
         parameter.add("a");
         parameter.add("b", "2");
         parameter.add("c", "3");
-        parameter.add(Map.of("c", "4"));
+        parameter.add(singletonMap("c", "4"));
         assertThat(parameter.build("&")).isEqualTo("a=1&a&b=2&c=3&c=4");
     }
 
     @Test
     void addParameters() {
         ParameterBuilder parameter = ParameterBuilder.of("a=1", "&");
-        parameter.addAll("a", List.of("2", "3"));
-        parameter.addAll(Map.of("b", List.of("4", "5")));
+        parameter.addAll("a", asList("2", "3"));
+        parameter.addAll(singletonMap("b", asList("4", "5")));
         assertThat(parameter.build("&")).isEqualTo("a=1&a=2&a=3&b=4&b=5");
     }
 
@@ -68,7 +67,7 @@ class ParameterBuilderShould {
         ParameterBuilder parameter = ParameterBuilder.of("a=1&a&b=2&c=3&c=4", "&");
         parameter.set("a");
         parameter.set("b", "1");
-        parameter.set(Map.of("c", "2"));
+        parameter.set(singletonMap("c", "2"));
         assertThat(parameter.build("&")).isEqualTo("a&b=1&c=2");
     }
 
@@ -81,7 +80,7 @@ class ParameterBuilderShould {
     void removeParameter() {
         ParameterBuilder parameter = ParameterBuilder.of("a=1&a&b=2&c=3&c=4&d=5", "&");
         parameter.remove("a");
-        parameter.remove(List.of("b", "c"));
+        parameter.remove(asList("b", "c"));
         assertThat(parameter.build("&")).isEqualTo("d=5");
     }
 

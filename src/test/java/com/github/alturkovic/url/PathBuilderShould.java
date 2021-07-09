@@ -26,8 +26,7 @@ package com.github.alturkovic.url;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -36,7 +35,7 @@ class PathBuilderShould {
     @Test
     void addToPath() {
         PathBuilder path = PathBuilder.of("a");
-        path.addSegment("b").addSegment("").add(List.of("c", "d")).add("e/f");
+        path.addSegment("b").addSegment("").add(asList("c", "d")).add("e/f");
         assertThat(path.build()).isEqualTo("/a/b//c/d/e/f");
     }
 
@@ -50,7 +49,7 @@ class PathBuilderShould {
     @Test
     void setPath() {
         assertThat(PathBuilder.of("/a/b").set("c").build()).isEqualTo("/c");
-        assertThat(PathBuilder.of("/a/b").set(List.of("c", "d")).build()).isEqualTo("/c/d");
+        assertThat(PathBuilder.of("/a/b").set(asList("c", "d")).build()).isEqualTo("/c/d");
     }
 
     @Test
@@ -63,14 +62,14 @@ class PathBuilderShould {
         assertThat(PathBuilder.of("/a/b/c").removeFirst().build()).isEqualTo("/b/c");
         assertThat(PathBuilder.of("/a/b/c").removeLast().build()).isEqualTo("/a/b");
         assertThat(PathBuilder.of("/a/b/c").remove(1).build()).isEqualTo("/a/c");
-        assertThat(PathBuilder.of("/a/b/c").remove(List.of("a", "b")).build()).isEqualTo("/c");
+        assertThat(PathBuilder.of("/a/b/c").remove(asList("a", "b")).build()).isEqualTo("/c");
         assertThat(PathBuilder.of("/a/b/c").remove("a/b").build()).isEqualTo("/c");
     }
 
     @Test
     void notRemovePartOfPathIfItDoesNotMatch() {
         assertThatThrownBy(() -> PathBuilder.of("/a/b/c").remove("b/c").build());
-        assertThatThrownBy(() -> PathBuilder.of("/a/b/c").remove(List.of("b", "c")).build());
+        assertThatThrownBy(() -> PathBuilder.of("/a/b/c").remove(asList("b", "c")).build());
     }
 
     @Test
