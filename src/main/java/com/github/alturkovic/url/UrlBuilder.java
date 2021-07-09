@@ -30,8 +30,9 @@ import lombok.NoArgsConstructor;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.function.Consumer;
+
+import static com.github.alturkovic.url.UrlParseUtils.parse;
 
 /**
  * Used to build urls as {@link URI}s.
@@ -97,8 +98,7 @@ public class UrlBuilder {
      */
     public static UrlBuilder of(String urlString) {
         urlString = ProtocolEnforcer.addProtocolIfMissing(urlString, DEFAULT_PROTOCOL);
-        URL url = UrlParseUtils.asUrl(urlString);
-        URI uri = UrlParseUtils.asUri(url);
+        URI uri = parse(urlString);
         return of(uri);
     }
 

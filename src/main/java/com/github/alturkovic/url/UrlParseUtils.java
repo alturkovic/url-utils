@@ -34,6 +34,11 @@ import java.nio.charset.Charset;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class UrlParseUtils {
 
+    static URI parse(String urlString) {
+        URL url = asUrl(urlString);
+        return asUri(url);
+    }
+
     static URL asUrl(String urlString) {
         try {
             return new URL(urlString);
