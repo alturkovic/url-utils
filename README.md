@@ -87,7 +87,7 @@ System.out.println(UrlEquals.areUrlsEqual(source, target)); // true
 
 ## Importing into your project using Maven
 
-Add the JitPack repository into your `pom.xml`.
+Add the JitPack repository to your `pom.xml`.
 
 ```xml
 
@@ -102,12 +102,9 @@ Add the JitPack repository into your `pom.xml`.
 Add the following under your `<dependencies>`:
 
 ```xml
-
-<dependencies>
-    <dependency>
-        <groupId>com.github.alturkovic</groupId>
-        <artifactId>url-utils</artifactId>
-        <version>1.3.0</version>
-    </dependency>
-</dependencies>
+<dependency>
+    <groupId>com.github.alturkovic</groupId>
+    <artifactId>url-utils</artifactId>
+    <version>1.3.0</version>
+</dependency>
 ```
