@@ -44,6 +44,30 @@ class UrlParserShould {
     }
 
     @Test
+    void parseUnderscoredHost() {
+        assertThat(UrlParser.parse("underscore_example.com"))
+            .hasToString("https://underscore_example.com");
+    }
+
+    @Test
+    void parseUnderscoredHostWithUserInfo() {
+        assertThat(UrlParser.parse("user:pass@underscore_example.com"))
+            .hasToString("https://user:pass@underscore_example.com");
+    }
+
+    @Test
+    void parseNonAsciiHost() {
+        assertThat(UrlParser.parse("教育.个人.hk"))
+            .hasToString("https://教育.个人.hk");
+    }
+
+    @Test
+    void parseNonAsciiHostWithUserInfo() {
+        assertThat(UrlParser.parse("user@教育.个人.hk"))
+            .hasToString("https://user@教育.个人.hk");
+    }
+
+    @Test
     void getProtocol() {
         assertThat(UrlParser.of("http://localhost:8080/").getProtocol())
             .isEqualTo("http");

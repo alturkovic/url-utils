@@ -45,7 +45,7 @@ public class UrlBuilder {
     private String protocol;
     private UserInfo userInfo;
     private HostBuilder host;
-    private Integer port;
+    private int port;
     private PathBuilder path;
     private ParameterBuilder query;
     private String fragment;
@@ -63,29 +63,15 @@ public class UrlBuilder {
     public static UrlBuilder of(URI uri) {
         UrlBuilder builder = new UrlBuilder()
             .protocol(uri.getScheme() == null ? DEFAULT_PROTOCOL : uri.getScheme())
-            .userInfo(uri.getRawUserInfo())
             .port(uri.getPort())
             .fragment(StringUtils.removeSuffix(uri.getRawFragment(), "/"));
 
-        builder.host = HostBuilder.of(uri.getHost());
+        builder = populateAuthority(uri, builder);
+
         builder.path = PathBuilder.of(uri.getRawPath());
         builder.query = ParameterBuilder.of(uri.getRawQuery(), "&");
 
-        if (StringUtils.hasText(uri.getRawFragment())) {
-            if (StringUtils.endsWith(uri.getRawFragment(), "/")) {
-                builder.appendTrailingSlash = true;
-            }
-        } else if (StringUtils.hasText(uri.getRawQuery())) {
-            if (StringUtils.endsWith(uri.getRawQuery(), "/")) {
-                builder.appendTrailingSlash = true;
-            }
-        } else if (StringUtils.hasText(uri.getRawPath())) {
-            if (StringUtils.endsWith(uri.getRawPath(), "/")) {
-                builder.appendTrailingSlash = true;
-            }
-        }
-
-        return builder;
+        return determineIfTrailingSlashIsPresent(uri, builder);
     }
 
     /**
@@ -141,8 +127,7 @@ public class UrlBuilder {
      * @return this builder
      */
     public UrlBuilder userInfo(String user, String password) {
-        this.userInfo.setUser(user);
-        this.userInfo.setPassword(password);
+        this.userInfo = new UserInfo(user, password);
         return this;
     }
 
@@ -174,7 +159,7 @@ public class UrlBuilder {
      * @param port to set
      * @return this builder
      */
-    public UrlBuilder port(Integer port) {
+    public UrlBuilder port(int port) {
         this.port = port;
         return this;
     }
@@ -265,7 +250,7 @@ public class UrlBuilder {
      * @return this builder
      */
     public UrlBuilder withoutPort() {
-        return port(null);
+        return port(-1);
     }
 
     /**
@@ -341,9 +326,12 @@ public class UrlBuilder {
             String builtHost = host.build();
             String builtPath = path.build();
             String builtQuery = query.build("&");
-            String formattedUserInfo = this.userInfo.format();
-            int definedPort = port == null ? -1 : port;
+            String builtAuthority = new AuthorityParser(builtHost, userInfo).format();
             String definedFragment = fragment;
+
+            if (port != -1) {
+                builtAuthority = String.format("%s:%d", builtAuthority, port);
+            }
 
             // Java URI has trailingSlash on the last defined component
             if (appendTrailingSlash) {
@@ -362,7 +350,7 @@ public class UrlBuilder {
                 }
             }
 
-            return new URI(protocol, formattedUserInfo, builtHost, definedPort, builtPath, builtQuery, definedFragment);
+            return new URI(protocol, builtAuthority, builtPath, builtQuery, definedFragment);
         } catch (URISyntaxException e) {
             throw new IllegalArgumentException(e);
         }
@@ -377,5 +365,35 @@ public class UrlBuilder {
      */
     public UrlParser asParser() {
         return UrlParser.of(build());
+    }
+
+    private static UrlBuilder populateAuthority(URI uri, UrlBuilder builder) {
+        if (uri.getHost() != null) {
+            builder.host = HostBuilder.of(uri.getHost());
+            return builder.userInfo(uri.getRawUserInfo());
+        } else {
+            AuthorityParser authority = new AuthorityParser(uri.getRawAuthority());
+            builder.host = HostBuilder.of(authority.getHost());
+            builder.userInfo = authority.getUserInfo();
+            return builder;
+        }
+    }
+
+    private static UrlBuilder determineIfTrailingSlashIsPresent(URI uri, UrlBuilder builder) {
+        if (StringUtils.hasText(uri.getRawFragment())) {
+            if (StringUtils.endsWith(uri.getRawFragment(), "/")) {
+                builder.appendTrailingSlash = true;
+            }
+        } else if (StringUtils.hasText(uri.getRawQuery())) {
+            if (StringUtils.endsWith(uri.getRawQuery(), "/")) {
+                builder.appendTrailingSlash = true;
+            }
+        } else if (StringUtils.hasText(uri.getRawPath())) {
+            if (StringUtils.endsWith(uri.getRawPath(), "/")) {
+                builder.appendTrailingSlash = true;
+            }
+        }
+
+        return builder;
     }
 }

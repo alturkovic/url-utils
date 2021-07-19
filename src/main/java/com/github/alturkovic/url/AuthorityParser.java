@@ -26,41 +26,30 @@ package com.github.alturkovic.url;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-class UserInfo {
-    private String user;
-    private String password;
+class AuthorityParser {
+    private final String host;
+    private final UserInfo userInfo;
 
-    static UserInfo of(String userInfo) {
-        if (StringUtils.isBlank(userInfo)) {
-            return new UserInfo();
+    public AuthorityParser(String authority) {
+        if (authority.contains("@")) {
+            String[] userInfoAndHost = authority.split("@");
+            this.userInfo = UserInfo.of(userInfoAndHost[0]);
+            this.host = userInfoAndHost[1];
+        } else {
+            this.host = authority;
+            this.userInfo = new UserInfo();
         }
-
-        String[] parts = userInfo.split(":");
-        if (parts.length == 1) {
-            return withUser(parts[0]);
-        }
-
-        return new UserInfo(parts[0], parts[1]);
-    }
-
-    static UserInfo withUser(String user) {
-        return new UserInfo(user, null);
     }
 
     public String format() {
-        if (user == null && password == null) {
-            return null;
+        String userInfo = this.userInfo.format();
+        if (userInfo == null) {
+            return host;
         }
 
-        if (StringUtils.isBlank(password)) {
-            return user;
-        }
-
-        return String.join(":", user, password);
+        return String.format("%s@%s", userInfo, host);
     }
 }
