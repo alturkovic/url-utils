@@ -212,22 +212,23 @@ public class UrlParser {
      *
      * @return the path
      */
-    public Optional<String> getParametrizedQuery() {
-        StringBuilder parametrizedQuery = new StringBuilder();
+    public Optional<String> getResource() {
+        StringBuilder resource = new StringBuilder();
 
-        getPath().ifPresent(parametrizedQuery::append);
+        getPath().ifPresent(resource::append);
 
         Map<String, List<String>> queryParameters = getQueryParameters();
         if (!queryParameters.isEmpty()) {
-            parametrizedQuery.append("?");
-            parametrizedQuery.append(new ParameterBuilder().addAll(queryParameters).build("&"));
+            resource.append("?").append(new ParameterBuilder().addAll(queryParameters).build("&"));
         }
 
-        if (parametrizedQuery.length() == 0) {
+        getFragment().ifPresent(fragment -> resource.append("#").append(fragment));
+
+        if (resource.length() == 0) {
             return Optional.empty();
         }
 
-        return Optional.of(parametrizedQuery.toString());
+        return Optional.of(resource.toString());
     }
 
     /**

@@ -29,14 +29,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static com.github.alturkovic.url.UrlParseUtils.decode;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
@@ -274,7 +272,7 @@ public class PathBuilder {
         PathBuilder builder = new PathBuilder();
         String[] paths = path.split("/", -1);
         for (String p : paths) {
-            builder.addSegment(decode(p, StandardCharsets.UTF_8));
+            builder.addSegment(UrlParseUtils.decode(p));
         }
         return builder;
     }

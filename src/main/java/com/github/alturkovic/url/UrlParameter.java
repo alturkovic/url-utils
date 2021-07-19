@@ -28,9 +28,6 @@ import lombok.Data;
 
 import java.util.Optional;
 
-import static com.github.alturkovic.url.UrlParseUtils.decode;
-import static java.nio.charset.StandardCharsets.UTF_8;
-
 @Data
 class UrlParameter {
     private final String name;
@@ -51,13 +48,13 @@ class UrlParameter {
     static Optional<UrlParameter> parse(String param) {
         String[] parts = param.split("=");
         if (parts.length == 1) {
-            String name = decode(parts[0], UTF_8);
+            String name = UrlParseUtils.decode(parts[0]);
             return Optional.of(UrlParameter.named(name));
         }
 
         if (parts.length == 2) {
-            String name = decode(parts[0], UTF_8);
-            String value = decode(parts[1], UTF_8);
+            String name = UrlParseUtils.decode(parts[0]);
+            String value = UrlParseUtils.decode(parts[1]);
             return Optional.of(UrlParameter.of(name, value));
         }
 

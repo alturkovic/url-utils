@@ -125,6 +125,21 @@ class UrlParserShould {
     }
 
     @Test
+    void parseNonAsciiQueries() {
+        assertThat(UrlParser.parse("http://localhost.com/index.php?text=Ισπανική έρευνα").toString())
+            .isEqualTo("http://localhost.com/index.php?text=Ισπανική%20έρευνα");
+
+        assertThat(UrlParser.parse("http://localhost.com/هرگزتوراناامیدنمیکنم").toString())
+            .isEqualTo("http://localhost.com/هرگزتوراناامیدنمیکنم");
+    }
+
+    @Test
+    void parseNonAsciiHostWithNonAsciiQuery() {
+        assertThat(UrlParser.parse("http://教育.个人.hk?q=Τα δείπνα").toString())
+            .isEqualTo("http://教育.个人.hk?q=Τα%20δείπνα");
+    }
+
+    @Test
     void getFragment() {
         assertThat(UrlParser.of("localhost:8080#DOWNLOAD/").getFragment())
             .isPresent().get()
@@ -198,29 +213,29 @@ class UrlParserShould {
     }
 
     @Test
-    void getParametrizedQuery() {
-        assertThat(UrlParser.of("localhost:8080/api?a=1&b=2/").getParametrizedQuery())
+    void getResource() {
+        assertThat(UrlParser.of("localhost:8080/api?a=1&b=2#c").getResource())
             .isPresent().get()
-            .isEqualTo("/api?a=1&b=2");
+            .isEqualTo("/api?a=1&b=2#c");
     }
 
     @Test
-    void getParametrizedQueryWithoutPath() {
-        assertThat(UrlParser.of("localhost:8080/?a=1&b=2/").getParametrizedQuery())
+    void getResourceWithoutPath() {
+        assertThat(UrlParser.of("localhost:8080?a=1&b=2/").getResource())
             .isPresent().get()
-            .isEqualTo("/?a=1&b=2");
+            .isEqualTo("?a=1&b=2");
     }
 
     @Test
-    void getParametrizedQueryWithoutQuery() {
-        assertThat(UrlParser.of("localhost:8080/api").getParametrizedQuery())
+    void getResourceWithoutQuery() {
+        assertThat(UrlParser.of("localhost:8080/api").getResource())
             .isPresent().get()
             .isEqualTo("/api");
     }
 
     @Test
-    void getEmptyParametrizedQueryWithoutPathAndQuery() {
-        assertThat(UrlParser.of("localhost:8080").getParametrizedQuery())
+    void getEmptyResourceWithoutPathAndQuery() {
+        assertThat(UrlParser.of("localhost:8080").getResource())
             .isEmpty();
     }
 

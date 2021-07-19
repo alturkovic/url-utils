@@ -44,15 +44,6 @@ class UrlBuilderShould {
     }
 
     @Test
-    void parseEncodedUrls() {
-        assertThat(UrlBuilder.of("http://localhost.com/index.php?text=Ισπανική έρευνα").build().toString())
-            .isEqualTo("http://localhost.com/index.php?text=Ισπανική%20έρευνα");
-
-        assertThat(UrlBuilder.of("http://localhost.com/هرگزتوراناامیدنمیکنم").build().toString())
-            .isEqualTo("http://localhost.com/هرگزتوراناامیدنمیکنم");
-    }
-
-    @Test
     void overrideProtocol() {
         assertThat(UrlBuilder.of("http://localhost.com")
             .protocol("https")

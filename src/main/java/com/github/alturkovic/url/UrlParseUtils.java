@@ -29,7 +29,7 @@ import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 
 import java.net.*;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class UrlParseUtils {
@@ -51,9 +51,7 @@ final class UrlParseUtils {
         try {
             return new URI(
                 url.getProtocol(),
-                url.getUserInfo(),
-                url.getHost(),
-                url.getPort(),
+                url.getAuthority(),
                 url.getPath(),
                 url.getQuery(),
                 url.getRef()
@@ -69,7 +67,7 @@ final class UrlParseUtils {
     }
 
     @SneakyThrows
-    static String decode(String url, Charset charset) {
-        return URLDecoder.decode(url, charset.name());
+    static String decode(String url) {
+        return URLDecoder.decode(url, StandardCharsets.UTF_8.name());
     }
 }
