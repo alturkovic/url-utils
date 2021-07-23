@@ -1,4 +1,4 @@
-![Java](https://img.shields.io/badge/Java-8%2B-ED8B00?style=for-the-badge&labelColor=ED8B00&logo=java&color=808080) ![JitPack](https://img.shields.io/jitpack/v/github/alturkovic/url-utils?style=for-the-badge&logo=Git&labelColor=007ec5&color=808080&logoColor=white) ![License](https://img.shields.io/github/license/alturkovic/url-utils?style=for-the-badge&color=808080&logo=Open%20Source%20Initiative&logoColor=white)
+![Java](https://img.shields.io/badge/Java-8%2B-ED8B00?style=for-the-badge&labelColor=ED8B00&logo=java&color=808080) ![JitPack](https://img.shields.io/jitpack/v/github/alturkovic/url-utils?style=for-the-badge&labelColor=007ec5&color=808080&logo=Git&logoColor=white) ![License](https://img.shields.io/github/license/alturkovic/url-utils?style=for-the-badge&color=808080&logo=Open%20Source%20Initiative&logoColor=white)
 
 `url-utils` helps you operate with URLs in Java.
 
