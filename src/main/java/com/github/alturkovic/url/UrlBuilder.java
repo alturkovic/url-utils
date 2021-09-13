@@ -27,9 +27,12 @@ package com.github.alturkovic.url;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.function.Consumer;
 
 import static com.github.alturkovic.url.UrlParseUtils.parse;
@@ -350,7 +353,7 @@ public class UrlBuilder {
                 }
             }
 
-            return new URI(protocol, builtAuthority, builtPath, builtQuery, definedFragment);
+            return new URI(protocol, builtAuthority, unescape(builtPath), builtQuery, definedFragment);
         } catch (URISyntaxException e) {
             throw new IllegalArgumentException(e);
         }
@@ -365,6 +368,15 @@ public class UrlBuilder {
      */
     public UrlParser asParser() {
         return UrlParser.of(build());
+    }
+
+    @SneakyThrows
+    private static String unescape(String path) {
+        if (path == null) {
+            return null;
+        }
+
+        return URLDecoder.decode(path, StandardCharsets.UTF_8.name());
     }
 
     private static UrlBuilder populateAuthority(URI uri, UrlBuilder builder) {

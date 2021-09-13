@@ -68,6 +68,12 @@ class UrlParserShould {
     }
 
     @Test
+    void parseEscapedPath() {
+        assertThat(UrlParser.parse("https://example.com/img/https://www.redirected.com/a%2Cb/logo_test.svg"))
+            .hasToString("https://example.com/img/https://www.redirected.com/a,b/logo_test.svg");
+    }
+
+    @Test
     void getProtocol() {
         assertThat(UrlParser.of("http://localhost:8080/").getProtocol())
             .isEqualTo("http");

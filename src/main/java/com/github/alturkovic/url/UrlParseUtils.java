@@ -34,35 +34,16 @@ import java.nio.charset.StandardCharsets;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class UrlParseUtils {
 
-    static URI parse(String urlString) {
-        URL url = asUrl(urlString);
-        return asUri(url);
-    }
-
-    static URL asUrl(String urlString) {
+    static URI parse(String url) {
         try {
-            return new URL(urlString);
-        } catch (MalformedURLException e) {
-            throw new IllegalArgumentException("Cannot parse url: " + urlString, e);
-        }
-    }
-
-    static URI asUri(URL url) {
-        try {
-            return new URI(
-                url.getProtocol(),
-                url.getAuthority(),
-                url.getPath(),
-                url.getQuery(),
-                url.getRef()
-            );
+            int colonIndex = url.indexOf(':');
+            int fragmentIndex = url.indexOf('#', colonIndex + 1);
+            String scheme = url.substring(0, colonIndex);
+            String ssp = url.substring(colonIndex + 1, (fragmentIndex > 0 ? fragmentIndex : url.length()));
+            String fragment = (fragmentIndex > 0 ? url.substring(fragmentIndex + 1) : null);
+            return new URI(scheme, ssp, fragment);
         } catch (URISyntaxException e) {
-            try {
-                return url.toURI();
-            } catch (URISyntaxException ignored) {
-                // fallback used for root based matrix-variables bug with Java URI
-            }
-            throw new IllegalArgumentException("Cannot parse uri: " + url, e);
+            throw new IllegalArgumentException("Cannot parse url: " + url, e);
         }
     }
 
