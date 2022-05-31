@@ -263,6 +263,44 @@ public class UrlParser {
         return UrlBuilder.of(builder.build());
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UrlParser urlParser = (UrlParser) o;
+
+        if (!getProtocol().equals(urlParser.getProtocol())) {
+            return false;
+        }
+
+        if (!asBuilder().getUserInfo().equals(urlParser.asBuilder().getUserInfo())) {
+            return false;
+        }
+
+        if (!getHost().equals(urlParser.getHost())) {
+            return false;
+        }
+
+        if (getPort() != urlParser.getPort()) {
+            return false;
+        }
+
+        if (!getPath().equals(urlParser.getPath())) {
+            return false;
+        }
+
+        if (!getQueryParameters().equals(urlParser.getQueryParameters())) {
+            return false;
+        }
+
+        if (!getFragment().equals(urlParser.getFragment())) {
+            return false;
+        }
+
+        return true;
+    }
+
     private Map<String, List<String>> asParameterMap(List<UrlParameter> parameters) {
         Map<String, List<String>> result = new HashMap<>();
         for (UrlParameter parameter : parameters) {

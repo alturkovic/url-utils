@@ -58,6 +58,14 @@ class UrlMatcherShould {
     }
 
     @Test
+    void matchRegisteredWithShorterPath() {
+        UrlMatcher matcher = new UrlMatcher();
+        matcher.register(parse("example.com/a/b"));
+
+        assertThat(matcher.matches(parse("example.com/a"))).isFalse();
+    }
+
+    @Test
     void notMatchUnregistered() {
         UrlMatcher matcher = new UrlMatcher();
         matcher.register(parse("example.com"));

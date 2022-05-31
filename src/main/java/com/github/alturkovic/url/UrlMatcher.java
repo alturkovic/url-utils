@@ -77,6 +77,10 @@ public class UrlMatcher {
                 return true;
             }
 
+            if (elements.isEmpty()) {
+                return false;
+            }
+
             String element = elements.pop();
             Node elementNode = this.elements.get(element);
             if (elementNode == null) {

@@ -43,35 +43,7 @@ public class UrlEquals {
         UrlParser sourceParser = parse(source);
         UrlParser targetParser = parse(target);
 
-        if (!sourceParser.getProtocol().equals(targetParser.getProtocol())) {
-            return false;
-        }
-
-        if (!sourceParser.asBuilder().getUserInfo().equals(targetParser.asBuilder().getUserInfo())) {
-            return false;
-        }
-
-        if (!sourceParser.getHost().equals(targetParser.getHost())) {
-            return false;
-        }
-
-        if (sourceParser.getPort() != targetParser.getPort()) {
-            return false;
-        }
-
-        if (!sourceParser.getPath().equals(targetParser.getPath())) {
-            return false;
-        }
-
-        if (!sourceParser.getQueryParameters().equals(targetParser.getQueryParameters())) {
-            return false;
-        }
-
-        if (!sourceParser.getFragment().equals(targetParser.getFragment())) {
-            return false;
-        }
-
-        return true;
+        return sourceParser.equals(targetParser);
     }
 
     private static UrlParser parse(URI source) {
