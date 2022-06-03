@@ -44,6 +44,12 @@ class UrlParserShould {
     }
 
     @Test
+    void parseProtocolIgnoringCase() {
+        assertThat(UrlParser.parse("HTTPS://example.com"))
+            .hasToString("https://example.com");
+    }
+
+    @Test
     void parseUnderscoredHost() {
         assertThat(UrlParser.parse("underscore_example.com"))
             .hasToString("https://underscore_example.com");

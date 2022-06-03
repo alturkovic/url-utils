@@ -103,11 +103,13 @@ public class UrlBuilder {
             throw new IllegalArgumentException("Protocol cannot be undefined");
         }
 
-        if (!protocol.equals("http") && !protocol.equals("https")) {
+        String normalizedProtocol = protocol.toLowerCase();
+
+        if (!normalizedProtocol.equals("http") && !normalizedProtocol.equals("https")) {
             throw new IllegalArgumentException("Only http(s) protocols supported. Provided: " + protocol);
         }
 
-        this.protocol = protocol;
+        this.protocol = normalizedProtocol;
         return this;
     }
 

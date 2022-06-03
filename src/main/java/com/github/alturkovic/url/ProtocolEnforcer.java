@@ -33,6 +33,7 @@ class ProtocolEnforcer {
         }
 
         return extractProtocol(url)
+            .map(String::toLowerCase)
             .map(p -> {
                 if (!p.equals("http") && !p.equals("https")) {
                     throw new IllegalArgumentException("Only http(s) protocols supported but found: " + p);
