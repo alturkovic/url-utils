@@ -48,13 +48,13 @@ class UrlParameter {
     static Optional<UrlParameter> parse(String param) {
         String[] parts = param.split("=");
         if (parts.length == 1) {
-            String name = UrlParseUtils.decode(parts[0]);
+            String name = parts[0];
             return Optional.of(UrlParameter.named(name));
         }
 
         if (parts.length == 2) {
-            String name = UrlParseUtils.decode(parts[0]);
-            String value = UrlParseUtils.decode(parts[1]);
+            String name = parts[0];
+            String value = parts[1];
             return Optional.of(UrlParameter.of(name, value));
         }
 

@@ -272,7 +272,7 @@ public class PathBuilder {
         PathBuilder builder = new PathBuilder();
         String[] paths = path.split("/", -1);
         for (String p : paths) {
-            builder.addSegment(UrlParseUtils.decode(p));
+            builder.addSegment(p);
         }
         return builder;
     }
